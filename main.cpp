@@ -4,8 +4,8 @@
 HINSTANCE hInstance;
 char szClassName[] = "WindowAppClass";
 char szChildClassName[] = "ChildClassName";
-long x;
-long y;
+long childWindowX;
+long childWindowY;
 
 LRESULT CALLBACK WndProc(
         HWND hwnd,
@@ -20,15 +20,6 @@ LRESULT CALLBACK ChildWndProc(
         WPARAM wParam,
         LPARAM lParam
 );
-
-int GetTextSize (LPSTR a0)
-{
-    for (int iLoopCounter = 0; ;iLoopCounter++)
-    {
-        if (a0 [iLoopCounter] == '\0')
-            return iLoopCounter;
-    }
-}
 
 bool RegClass(WNDPROC proc, LPCSTR szName, UINT color) {
 
@@ -53,7 +44,7 @@ LRESULT CALLBACK WndProc(HWND hwnd,
         LPARAM lParam
         ) {
 
-    static short cxClient, cyClient,
+    static short parentWindowWidth, parentWindowHeight,
         left, top, Width, Height;
     static HWND childHwnd;
 
@@ -65,8 +56,8 @@ LRESULT CALLBACK WndProc(HWND hwnd,
             if (IsWindow(childHwnd)) {
                 MoveWindow(
                         childHwnd,
-                        left + cxClient - Width,
-                        top + cyClient - Height,
+                        left + parentWindowWidth - Width,
+                        top + parentWindowHeight - Height,
                         Width,
                         Height,
                         true
@@ -77,16 +68,16 @@ LRESULT CALLBACK WndProc(HWND hwnd,
         }
 
         case WM_SIZE: {
-            cxClient = LOWORD(lParam);
-            cyClient = HIWORD(lParam);
-            Width = cxClient / 10;
-            Height = cyClient / 10;
+            parentWindowWidth = LOWORD(lParam);
+            parentWindowHeight = HIWORD(lParam);
+            Width = parentWindowWidth / 10;
+            Height = parentWindowHeight / 10;
 
             if (IsWindow(childHwnd)) {
                 MoveWindow(
                         childHwnd,
-                        left + cxClient - Width,
-                        top + cyClient - Height,
+                        left + parentWindowWidth - Width,
+                        top + parentWindowHeight - Height,
                         Width,
                         Height,
                         true
@@ -97,22 +88,49 @@ LRESULT CALLBACK WndProc(HWND hwnd,
         }
 
         case WM_LBUTTONDOWN: {
-            x = LOWORD(lParam);
-            y = HIWORD(lParam);
+            childWindowX = LOWORD(lParam);
+            childWindowY = HIWORD(lParam);
 
             DestroyWindow(childHwnd);
             childHwnd = CreateWindow(
                 szChildClassName,
                "Child window",
                WS_VISIBLE | WS_CHILD,
-               x,
-               y,
+               childWindowX,
+               childWindowY,
                Width,
                Height,
                hwnd,
                0,
                hInstance,
                NULL
+            );
+
+            return 0;
+        }
+
+        case WM_RBUTTONDOWN: {
+            short newX, newY;
+
+            if (childWindowX > parentWindowWidth / 2) {
+                newX = childWindowX - parentWindowWidth  / 2;
+            } else {
+                newX = childWindowX + parentWindowWidth  / 2;
+            }
+
+            if (childWindowY > parentWindowHeight / 2) {
+                newY = childWindowY - parentWindowHeight / 2;
+            } else {
+                newY = childWindowY + parentWindowHeight / 2;
+            }
+
+            MoveWindow(
+                    childHwnd,
+                    newX,
+                    newY,
+                    Width,
+                    Height,
+                    true
             );
 
             return 0;
@@ -139,7 +157,7 @@ LRESULT CALLBACK ChildWndProc(
     PAINTSTRUCT PaintStruct;
     RECT Rect;
     char text[100];
-    sprintf_s(text, "x=%ld y=%ld", x, y);
+    sprintf_s(text, "x=%ld y=%ld", childWindowX, childWindowY);
 
     switch (msg) {
         case WM_PAINT: {
