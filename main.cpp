@@ -53,31 +53,24 @@ LRESULT CALLBACK WndProc(HWND hwnd,
         LPARAM lParam
         ) {
 
-    static short cxClient, cyClient, yStep, xStep,
+    static short cxClient, cyClient,
         left, top, Width, Height;
-    static HWND hwnds[5];
+    static HWND childHwnd;
 
     switch (msg) {
-        case WM_CREATE: {
-            yStep = GetSystemMetrics(SM_CYCAPTION);
-            return 0;
-        }
-
         case WM_MOVE: {
             left = LOWORD(lParam);
             top = HIWORD(lParam);
 
-            for (short j = 0; j < 5; j++) {
-                if (IsWindow(hwnds[j])) {
-                    MoveWindow(
-                        hwnds[j],
-                        left + cxClient - Width - xStep * j,
-                        top + cyClient - Height - yStep * j,
+            if (IsWindow(childHwnd)) {
+                MoveWindow(
+                        childHwnd,
+                        left + cxClient - Width,
+                        top + cyClient - Height,
                         Width,
                         Height,
                         true
-                    );
-                }
+                );
             }
 
             return 0;
@@ -86,21 +79,18 @@ LRESULT CALLBACK WndProc(HWND hwnd,
         case WM_SIZE: {
             cxClient = LOWORD(lParam);
             cyClient = HIWORD(lParam);
-            Width = cxClient / 2;
-            Height = cyClient - 4 * yStep;
-            xStep = (cxClient - Width) / 4;
+            Width = cxClient / 10;
+            Height = cyClient / 10;
 
-            for (short j = 0; j < 5; j++) {
-                if (IsWindow(hwnds[j])) {
-                    MoveWindow(
-                            hwnds[j],
-                            left + cxClient - Width - xStep * j,
-                            top + cyClient - Height - yStep * j,
-                            Width,
-                            Height,
-                            true
-                    );
-                }
+            if (IsWindow(childHwnd)) {
+                MoveWindow(
+                        childHwnd,
+                        left + cxClient - Width,
+                        top + cyClient - Height,
+                        Width,
+                        Height,
+                        true
+                );
             }
 
             return 0;
@@ -109,17 +99,14 @@ LRESULT CALLBACK WndProc(HWND hwnd,
         case WM_LBUTTONDOWN: {
             x = LOWORD(lParam);
             y = HIWORD(lParam);
-            short i = 0;
-            for (; i < 5, IsWindow(hwnds[i]); i++);
 
-            if (i > 4) { return  0; }
-
-            hwnds[i] = CreateWindow(
+            DestroyWindow(childHwnd);
+            childHwnd = CreateWindow(
                 szChildClassName,
                "Child window",
                WS_VISIBLE | WS_CHILD,
-               left + cxClient - Width - xStep * i,
-               top + cyClient - Height - yStep * i,
+               x,
+               y,
                Width,
                Height,
                hwnd,
@@ -127,12 +114,6 @@ LRESULT CALLBACK WndProc(HWND hwnd,
                hInstance,
                NULL
             );
-
-            if (i > 0) {
-                SetWindowPos(hwnds[i], hwnds[i - 1], 0, 0,
-                        Width, Height, SWP_NOMOVE);
-                SetForegroundWindow(hwnds[0]);
-            }
 
             return 0;
         }
@@ -167,10 +148,6 @@ LRESULT CALLBACK ChildWndProc(
 
             DrawText(hDC, text, -1, &Rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
             EndPaint(hwnd, &PaintStruct);
-            return 0;
-        }
-
-        case WM_MOVE: {
             return 0;
         }
 
