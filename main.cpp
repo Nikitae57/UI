@@ -22,7 +22,6 @@ LRESULT CALLBACK ChildWndProc(
 );
 
 bool RegClass(WNDPROC proc, LPCSTR szName, UINT color) {
-
     WNDCLASS windowClass;
     windowClass.style = CS_HREDRAW | CS_VREDRAW;
     windowClass.cbClsExtra = 0;
@@ -42,31 +41,18 @@ LRESULT CALLBACK WndProc(HWND hwnd,
         UINT msg,
         WPARAM wParam,
         LPARAM lParam
-        ) {
+) {
 
-    static short parentWindowWidth, parentWindowHeight,
-        left, top, Width, Height;
     static HWND childHwnd;
+    static short
+        parentWindowWidth,
+        parentWindowHeight,
+        left,
+        top,
+        Width,
+        Height;
 
     switch (msg) {
-        case WM_MOVE: {
-            left = LOWORD(lParam);
-            top = HIWORD(lParam);
-
-            if (IsWindow(childHwnd)) {
-                MoveWindow(
-                        childHwnd,
-                        left + parentWindowWidth - Width,
-                        top + parentWindowHeight - Height,
-                        Width,
-                        Height,
-                        true
-                );
-            }
-
-            return 0;
-        }
-
         case WM_SIZE: {
             parentWindowWidth = LOWORD(lParam);
             parentWindowHeight = HIWORD(lParam);
@@ -178,11 +164,11 @@ LRESULT CALLBACK ChildWndProc(
 }
 
 int WINAPI WinMain(
-        HINSTANCE hInst,
-        HINSTANCE hPrevInstance,
-        LPSTR lpszCmdLine,
-        int nCmdShow
-    ) {
+    HINSTANCE hInst,
+    HINSTANCE hPrevInstance,
+    LPSTR lpszCmdLine,
+    int nCmdShow
+) {
 
     MSG msg;
     HWND hwnd;
