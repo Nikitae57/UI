@@ -111,17 +111,19 @@ LRESULT CALLBACK WndProc(HWND hwnd,
 
         case WM_RBUTTONDOWN: {
             short newX, newY;
+            long clickX = LOWORD(lParam);
+            long clickY = HIWORD(lParam);
 
-            if (childWindowX > parentWindowWidth / 2) {
-                newX = childWindowX - parentWindowWidth  / 2;
+            if (clickX > parentWindowWidth / 2) {
+                newX = clickX - parentWindowWidth  / 2;
             } else {
-                newX = childWindowX + parentWindowWidth  / 2;
+                newX = clickX + parentWindowWidth  / 2;
             }
 
-            if (childWindowY > parentWindowHeight / 2) {
-                newY = childWindowY - parentWindowHeight / 2;
+            if (clickY > parentWindowHeight / 2) {
+                newY = clickY - parentWindowHeight / 2;
             } else {
-                newY = childWindowY + parentWindowHeight / 2;
+                newY = clickY + parentWindowHeight / 2;
             }
 
             MoveWindow(
