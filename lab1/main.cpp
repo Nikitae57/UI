@@ -47,8 +47,6 @@ LRESULT CALLBACK WndProc(HWND hwnd,
     static short
         parentWindowWidth,
         parentWindowHeight,
-        left,
-        top,
         Width,
         Height;
 
@@ -62,8 +60,8 @@ LRESULT CALLBACK WndProc(HWND hwnd,
             if (IsWindow(childHwnd)) {
                 MoveWindow(
                         childHwnd,
-                        left + parentWindowWidth - Width,
-                        top + parentWindowHeight - Height,
+                        parentWindowWidth - Width,
+                        parentWindowHeight - Height,
                         Width,
                         Height,
                         true
@@ -81,7 +79,7 @@ LRESULT CALLBACK WndProc(HWND hwnd,
             childHwnd = CreateWindow(
                 szChildClassName,
                "Child window",
-               WS_VISIBLE | WS_CHILD,
+               WS_VISIBLE | WS_CHILD | WS_OVERLAPPEDWINDOW,
                childWindowX,
                childWindowY,
                Width,
