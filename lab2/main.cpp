@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <stdio.h>
+#include <malloc.h>
 
 HINSTANCE hInstance;
 char szClassName[] = "WindowAppClass";
@@ -43,17 +44,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
     case WM_RBUTTONDOWN: {
       CreateWindow(
-          "cls",
-          "window name",
-          -123.2,
-          -10,
-          -10,
-          -100,
-          -100,
           NULL,
           NULL,
           NULL,
-          NULL);
+          NULL,
+          NULL, NULL, NULL, NULL,
+          NULL,
+          NULL,
+          NULL
+      );
       showErrMsg(hwnd);
 
       return 0;

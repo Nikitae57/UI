@@ -1,0 +1,3 @@
+D:/projects/ui/contr/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+D:/projects/ui/contr/cmake-build-debug/CMakeFiles/contr.dir
+D:/projects/ui/contr/cmake-build-debug/CMakeFiles/edit_cache.dir

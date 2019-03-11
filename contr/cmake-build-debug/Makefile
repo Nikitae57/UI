@@ -47,24 +47,13 @@ RM = "C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\projects\ui\lab2
+CMAKE_SOURCE_DIR = D:\projects\ui\contr
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\projects\ui\lab2\cmake-build-debug
+CMAKE_BINARY_DIR = D:\projects\ui\contr\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
-
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	"C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available."
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
 
 # Special rule for the target rebuild_cache
 rebuild_cache:
@@ -77,11 +66,22 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	"C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available."
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
+
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\projects\ui\lab2\cmake-build-debug\CMakeFiles D:\projects\ui\lab2\cmake-build-debug\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\projects\ui\contr\cmake-build-debug\CMakeFiles D:\projects\ui\contr\cmake-build-debug\CMakeFiles\progress.marks
 	$(MAKE) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\projects\ui\lab2\cmake-build-debug\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\projects\ui\contr\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -110,17 +110,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named lab2
+# Target rules for targets named contr
 
 # Build rule for target.
-lab2: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 lab2
-.PHONY : lab2
+contr: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 contr
+.PHONY : contr
 
 # fast build rule for target.
-lab2/fast:
-	$(MAKE) -f CMakeFiles\lab2.dir\build.make CMakeFiles/lab2.dir/build
-.PHONY : lab2/fast
+contr/fast:
+	$(MAKE) -f CMakeFiles\contr.dir\build.make CMakeFiles/contr.dir/build
+.PHONY : contr/fast
 
 main.obj: main.cpp.obj
 
@@ -128,7 +128,7 @@ main.obj: main.cpp.obj
 
 # target to build an object file
 main.cpp.obj:
-	$(MAKE) -f CMakeFiles\lab2.dir\build.make CMakeFiles/lab2.dir/main.cpp.obj
+	$(MAKE) -f CMakeFiles\contr.dir\build.make CMakeFiles/contr.dir/main.cpp.obj
 .PHONY : main.cpp.obj
 
 main.i: main.cpp.i
@@ -137,7 +137,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) -f CMakeFiles\lab2.dir\build.make CMakeFiles/lab2.dir/main.cpp.i
+	$(MAKE) -f CMakeFiles\contr.dir\build.make CMakeFiles/contr.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -146,7 +146,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) -f CMakeFiles\lab2.dir\build.make CMakeFiles/lab2.dir/main.cpp.s
+	$(MAKE) -f CMakeFiles\contr.dir\build.make CMakeFiles/contr.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -155,9 +155,9 @@ help:
 	@echo ... all (the default if no target is provided)
 	@echo ... clean
 	@echo ... depend
-	@echo ... lab2
-	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... contr
+	@echo ... edit_cache
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
