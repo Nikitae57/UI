@@ -2,12 +2,10 @@
 #include <string>
 #include <shlobj.h>
 #include <iostream>
-#include <sstream>
-#include <stdio.h>
 
 void archiveDir(char* path) {
   char systemCommand[1000];
-  sprintf_s(systemCommand, "7z a \"%s.zip\" -r \"%s\"", path, path);
+  sprintf_s(systemCommand, "7z a \"%s.zip\" -r \"%s\\*\"", path, path);
   std::cout << "cmd: " << systemCommand << '\n';
 //  system("7z a \"D:\\archive.zip\" -r \"D:\\projects\\arch\\labs\"");
   system(systemCommand);
@@ -34,6 +32,8 @@ int WINAPI WinMain(
   char selectedPath[MAX_PATH];
   SHGetPathFromIDList(pidl, selectedPath);
 
-//  std::cout << selectedPath;
+  std::cout << selectedPath;
   archiveDir(selectedPath);
+
+  return 0;
 }

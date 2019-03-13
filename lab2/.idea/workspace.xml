@@ -13,20 +13,19 @@
   <component name="ChangeListManager">
     <list default="true" id="9d2afd6a-3aa3-4ca5-b585-a8ecf839abd5" name="Default Changelist" comment="Fixed lab2">
       <change beforePath="$PROJECT_DIR$/../contr/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../contr/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/3.13.2/CMakeDetermineCompilerABI_C.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/3.13.2/CMakeDetermineCompilerABI_C.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/3.13.2/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/3.13.2/CMakeDetermineCompilerABI_CXX.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/3.13.2/CompilerIdC/a.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/3.13.2/CompilerIdC/a.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/3.13.2/CompilerIdCXX/a.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/3.13.2/CompilerIdCXX/a.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/contr.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/contr.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/contr.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/contr.dir/flags.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/contr.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/contr.dir/link.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/feature_tests.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/cmake-build-debug/CMakeFiles/feature_tests.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../contr/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../contr/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab2.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab2.dir/CXX.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab2.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab2.dir/depend.internal" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab2.dir/main.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab2.dir/main.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab2.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab2.dir/objects.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/lab2.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/lab2.exe" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -156,7 +155,7 @@
       <workItem from="1552221852898" duration="933000" />
       <workItem from="1552224101786" duration="1245000" />
       <workItem from="1552284053915" duration="5472000" />
-      <workItem from="1552494715358" duration="922000" />
+      <workItem from="1552494715358" duration="1289000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed lab2">
       <created>1552292637122</created>
@@ -169,7 +168,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14067000" />
+    <option name="totallyTimeSpent" value="14434000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
