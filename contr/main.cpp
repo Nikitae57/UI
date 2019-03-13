@@ -1,31 +1,16 @@
+#include <windows.h>
+#include <string>
+#include <shlobj.h>
 #include <iostream>
-#include <Windows.h>
-#include <compressapi.h>
+#include <sstream>
+#include <stdio.h>
 
-HINSTANCE hInstance;
-char szClassName[] = "WindowAppClass";
-
-LRESULT CALLBACK WndProc(
-    HWND hwnd,
-    UINT msg,
-    WPARAM wParam,
-    LPARAM lParam
-);
-
-bool RegClass(WNDPROC proc, LPCSTR szName, UINT color) {
-  WNDCLASS windowClass;
-  windowClass.style = CS_HREDRAW | CS_VREDRAW;
-  windowClass.cbClsExtra = 0;
-  windowClass.cbWndExtra = 0;
-  windowClass.lpfnWndProc = proc;
-  windowClass.hInstance = hInstance;
-  windowClass.hIcon = LoadCursor(NULL, IDI_APPLICATION);
-  windowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-  windowClass.hbrBackground = (HBRUSH) (color + 1);
-  windowClass.lpszMenuName = (LPCTSTR) NULL;
-  windowClass.lpszClassName = szName;
-
-  return RegisterClass(&windowClass);
+void archiveDir(char* path) {
+  char systemCommand[1000];
+  sprintf_s(systemCommand, "7z a \"%s.zip\" -r \"%s\"", path, path);
+  std::cout << "cmd: " << systemCommand << '\n';
+//  system("7z a \"D:\\archive.zip\" -r \"D:\\projects\\arch\\labs\"");
+  system(systemCommand);
 }
 
 int WINAPI WinMain(
@@ -34,46 +19,21 @@ int WINAPI WinMain(
     LPSTR lpszCmdLine,
     int nCmdShow
 ) {
+  char currentDir[500];
+  GetCurrentDirectory(500, currentDir);
 
-  MSG msg;
-  HWND hwnd;
-  hInstance = hInst;
-  COMPRESSOR_HANDLE Compressor    = NULL;
-  PBYTE CompressedBuffer          = NULL;
-  PBYTE InputBuffer               = NULL;
-  HANDLE InputFile                = INVALID_HANDLE_VALUE;
-  HANDLE CompressedFile           = INVALID_HANDLE_VALUE;
-  BOOL DeleteTargetFile           = TRUE;
-  BOOL Success;
-  SIZE_T CompressedDataSize, CompressedBufferSize;
-  DWORD InputFileSize, ByteRead, ByteWritten;
-  LARGE_INTEGER FileSize;
-  ULONGLONG StartTime, EndTime;
-  double TimeDuration;
+  BROWSEINFO bi = {0};
+  bi.lpszTitle = "Select directory to archive";
+  bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
+  bi.lpfn = NULL;
+  bi.lParam = (LPARAM) currentDir;
 
-  if (!RegClass(WndProc, szClassName, COLOR_WINDOW)) {
-    return false;
-  }
+  LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
+  if (pidl == 0) { return 0; }
 
-  hwnd = CreateWindow(
-      szClassName,
-      "Compressor",
-      WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-      CW_USEDEFAULT,
-      CW_USEDEFAULT,
-      CW_USEDEFAULT,
-      CW_USEDEFAULT,
-      0,
-      0,
-      hInstance,
-      NULL
-  );
+  char selectedPath[MAX_PATH];
+  SHGetPathFromIDList(pidl, selectedPath);
 
-  if (!hwnd) { return false; }
-
-  while (GetMessage(&msg, 0, 0, 0)) {
-    DispatchMessage(&msg);
-  }
-
-  return msg.wParam;
+//  std::cout << selectedPath;
+  archiveDir(selectedPath);
 }

@@ -6,9 +6,11 @@
 
 #IncludeRegexTransform: 
 
-D:/projects/c/lab2/main.cpp
+D:/projects/ui/lab2/main.cpp
 windows.h
 -
 stdio.h
+-
+malloc.h
 -
 
