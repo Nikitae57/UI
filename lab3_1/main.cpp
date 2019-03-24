@@ -80,9 +80,9 @@ LRESULT CALLBACK mainWindowProc(
       child1Hwnd = CreateMDI
 
       child1Hwnd = CreateWindow(
-          childClassname,
-          (LPSTR) "child1",
-          WS_CHILD | WS_VISIBLE | WS_OVERLAPPEDWINDOW,
+          TEXT("EDIT"),
+          (LPSTR) "",
+          WS_BORDER|WS_CHILD|WS_VISIBLE |ES_MULTILINE,
           10, 10,
           380, 540,
           hwnd,
@@ -92,9 +92,9 @@ LRESULT CALLBACK mainWindowProc(
       );
 
       child2Hwnd = CreateWindow(
-          childClassname,
-          "child2",
-          WS_CHILD| WS_VISIBLE | WS_OVERLAPPEDWINDOW,
+          TEXT("EDIT"),
+          (LPCSTR) "",
+          WS_BORDER|WS_CHILD|WS_VISIBLE|ES_MULTILINE,
           400, 10,
           380, 540,
           hwnd,
