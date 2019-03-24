@@ -29,12 +29,11 @@ void showErrMsg(DWORD error) {
 
   char finalMsg[500];
   sprintf_s(finalMsg, "%d\n%s%s", error, msgTextRus, msgTextEng);
+  MessageBox(NULL, finalMsg, NULL, NULL);
   std::cout << finalMsg << '\n';
 }
 
-DWORD WINAPI ThreadProc(CONST LPVOID lpParam) {
-  char *path = (char*) lpParam;
-
+void archive(char *path) {
   char systemCommand[1000];
   sprintf_s(
       systemCommand,
@@ -43,8 +42,21 @@ DWORD WINAPI ThreadProc(CONST LPVOID lpParam) {
       path
   );
 
-  system(systemCommand);
-  ExitThread(0);
+  PROCESS_INFORMATION pi;
+  ZeroMemory(&pi, sizeof(pi));
+  STARTUPINFO si;
+  ZeroMemory(&si, sizeof(si));
+  si.cb = sizeof(si);
+
+  BOOL bResult = CreateProcess(NULL, systemCommand,
+      NULL, NULL, FALSE, CREATE_NO_WINDOW,
+      NULL, NULL, &si, &pi);
+
+  if(bResult) {
+    WaitForSingleObject(pi.hProcess, INFINITE);
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+  }
 }
 
 int WINAPI WinMain(
@@ -70,11 +82,10 @@ int WINAPI WinMain(
   if (pidl == 0) { return 0; }
 
   SHGetPathFromIDList(pidl, path);
-  HANDLE threadHandle = CreateThread(NULL, 0, &ThreadProc, (LPVOID) path, 0, NULL);
-  WaitForSingleObject(threadHandle, INFINITE);
+  archive(path);
 
   DWORD error = GetLastError();
-  if (error != 0) {
+  if (error != 0 && error != 298) {
     showErrMsg(error);
   }
 
