@@ -1,7 +1,6 @@
 #include <iostream>
 #include <windows.h>
 #include <stdio.h>
-#include <tchar.h>
 
 char szClassName[] = "WindowAppClass";
 char buffer[1024];

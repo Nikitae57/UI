@@ -11,7 +11,13 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="297c7e57-b30a-49dc-8567-992378d346c8" name="Default Changelist" comment="" />
+    <list default="true" id="297c7e57-b30a-49dc-8567-992378d346c8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab3_1.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab3_1.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab3_1.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/lab3_1.dir/objects.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/lab3_1.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/lab3_1.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -34,8 +40,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="410">
-              <caret line="142" lean-forward="true" selection-start-line="142" selection-end-line="142" />
+            <state relative-caret-position="-1385">
+              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -141,13 +147,14 @@
       <workItem from="1552823918200" duration="1966000" />
       <workItem from="1553420010438" duration="7200000" />
       <workItem from="1553427248108" duration="607000" />
+      <workItem from="1553447735500" duration="132000" />
     </task>
-    <task id="LOCAL-00001" summary="Lab3 almost working">
-      <created>1553424063333</created>
+    <task id="LOCAL-00001" summary="Applied right changes to master">
+      <created>1553428890914</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1553424063333</updated>
+      <updated>1553428890914</updated>
     </task>
     <task id="LOCAL-00002" summary="Started MDI converting">
       <created>1553424775582</created>
@@ -156,10 +163,11 @@
       <option name="project" value="LOCAL" />
       <updated>1553424775582</updated>
     </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="841000" />
+    <option name="totallyTimeSpent" value="1598000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -172,8 +180,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.124200426" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12526652" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -244,7 +253,8 @@
     <MESSAGE value="Lab3 almost working" />
     <MESSAGE value="Started MDI converting" />
     <MESSAGE value="Canceled MDI" />
-    <option name="LAST_COMMIT_MESSAGE" value="Canceled MDI" />
+    <MESSAGE value="Applied right changes to master" />
+    <option name="LAST_COMMIT_MESSAGE" value="Applied right changes to master" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://C:/Program Files/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/x86_64-w64-mingw32/include/_mingw_unicode.h">
@@ -270,8 +280,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="142" lean-forward="true" selection-start-line="142" selection-end-line="142" />
+        <state relative-caret-position="-1385">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>

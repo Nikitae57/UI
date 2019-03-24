@@ -2,14 +2,11 @@
 #include <string>
 #include <shlobj.h>
 #include <iostream>
-#include <thread>         // std::this_thread::sleep_for
 
-char path[MAX_PATH];
-
-void showErrMsg() {
-  DWORD error = GetLastError();
+void showErrMsg(DWORD error) {
   LPVOID msgTextRus;
   LPVOID msgTextEng;
+
   FormatMessage(
       FORMAT_MESSAGE_ALLOCATE_BUFFER |
           FORMAT_MESSAGE_FROM_SYSTEM |
@@ -35,7 +32,9 @@ void showErrMsg() {
   std::cout << finalMsg << '\n';
 }
 
-DWORD WINAPI runThread(LPVOID lParam) {
+DWORD WINAPI ThreadProc(CONST LPVOID lpParam) {
+  char *path = (char*) lpParam;
+
   char systemCommand[1000];
   sprintf_s(
       systemCommand,
@@ -45,19 +44,7 @@ DWORD WINAPI runThread(LPVOID lParam) {
   );
 
   system(systemCommand);
-  return 0;
-}
-
-void archiveDir(char* path) {
-  char systemCommand[1000];
-  sprintf_s(
-      systemCommand,
-      "7z a \"%s.zip\" -r \"%s\\*\"",
-      path,
-      path
-  );
-
-  system(systemCommand);
+  ExitThread(0);
 }
 
 int WINAPI WinMain(
@@ -68,6 +55,7 @@ int WINAPI WinMain(
 ) {
   char currentDir[500];
   GetCurrentDirectory(500, currentDir);
+  char path[MAX_PATH];
 
   BROWSEINFO bi = {0};
   bi.lpszTitle = "Select directory to archive";
@@ -79,8 +67,13 @@ int WINAPI WinMain(
   if (pidl == 0) { return 0; }
 
   SHGetPathFromIDList(pidl, path);
-  std::thread t(archiveDir, path);
-  showErrMsg();
+  HANDLE threadHandle = CreateThread(NULL, 0, &ThreadProc, (LPVOID) path, 0, NULL);
+  WaitForSingleObject(threadHandle, INFINITE);
+
+  DWORD error = GetLastError();
+  if (error != 0) {
+    showErrMsg(error);
+  }
 
   return 0;
 }
