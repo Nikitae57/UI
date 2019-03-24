@@ -3,8 +3,6 @@
 #include <shlobj.h>
 #include <iostream>
 
-#pragma comment(linker, "/SUBSYSTEM:WINDOWS")
-
 void showErrMsg(DWORD error) {
   LPVOID msgTextRus;
   LPVOID msgTextEng;

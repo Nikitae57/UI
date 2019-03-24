@@ -12,16 +12,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="003ffffe-1aa9-44a9-af71-0fd0fd478d00" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/contr.dir/main.cpp.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/contr.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/contr.dir/objects.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/contr.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/contr.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/contr.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/contr.dir/CXX.includecache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lab1/titul.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../lab1/titul.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lab3_1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../lab3_1/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lab3_1/cmake-build-debug/CMakeFiles/lab3_1.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/../lab3_1/cmake-build-debug/CMakeFiles/lab3_1.dir/objects.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lab3_1/cmake-build-debug/lab3_1.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../lab3_1/cmake-build-debug/lab3_1.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lab3_1/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../lab3_1/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -45,8 +37,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="412">
-              <caret line="38" column="31" selection-start-line="38" selection-start-column="31" selection-end-line="38" selection-end-column="31" />
+            <state relative-caret-position="90">
+              <caret line="5" column="45" selection-start-line="5" selection-start-column="45" selection-end-line="5" selection-end-column="45" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -136,7 +128,7 @@
       <workItem from="1552535809206" duration="1219000" />
       <workItem from="1552537724033" duration="3364000" />
       <workItem from="1552823801492" duration="63000" />
-      <workItem from="1553447868599" duration="1297000" />
+      <workItem from="1553447868599" duration="1567000" />
     </task>
     <task id="LOCAL-00001" summary="Finished contr">
       <created>1552497619950</created>
@@ -152,11 +144,18 @@
       <option name="project" value="LOCAL" />
       <updated>1552499535284</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Now using WinApi for threading">
+      <created>1553449373027</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1553449373027</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12927000" />
+    <option name="totallyTimeSpent" value="13197000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -176,13 +175,13 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3261105" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3261105" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39857143" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32936078" />
       <window_info anchor="bottom" id="Database Changes" order="7" />
-      <window_info anchor="bottom" id="Messages" order="8" weight="0.3261105" />
+      <window_info active="true" anchor="bottom" id="Messages" order="8" visible="true" weight="0.3261105" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="11" />
@@ -201,7 +200,8 @@
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="Finished contr" />
     <MESSAGE value="Fixed contr" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed contr" />
+    <MESSAGE value="Now using WinApi for threading" />
+    <option name="LAST_COMMIT_MESSAGE" value="Now using WinApi for threading" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="editorHistoryManager">
@@ -214,8 +214,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="412">
-          <caret line="38" column="31" selection-start-line="38" selection-start-column="31" selection-end-line="38" selection-end-column="31" />
+        <state relative-caret-position="90">
+          <caret line="5" column="45" selection-start-line="5" selection-start-column="45" selection-end-line="5" selection-end-column="45" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
