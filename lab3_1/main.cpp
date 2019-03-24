@@ -1,10 +1,16 @@
 #include <iostream>
 #include <windows.h>
 #include <stdio.h>
+#include <tchar.h>
 
 char szClassName[] = "WindowAppClass";
 char childClassname[] = "childClass";
 char buffer[1024];
+
+int mainWindowWidth;
+int mainWindowHeight;
+const int idChild1 = 1001;
+const int idChild2 = 1002;
 
 HINSTANCE hInstance;
 HWND child1Hwnd;
@@ -71,6 +77,8 @@ LRESULT CALLBACK mainWindowProc(
 ) {
   switch (msg) {
     case WM_CREATE: {
+      child1Hwnd = CreateMDI
+
       child1Hwnd = CreateWindow(
           childClassname,
           (LPSTR) "child1",
@@ -144,12 +152,10 @@ int WINAPI WinMain(
   MSG msg;
   HWND hwnd;
   hInstance = hInst;
+  mainWindowHeight = GetSystemMetrics(SM_CYSCREEN);
+  mainWindowWidth = GetSystemMetrics(SM_CXSCREEN);
 
   if (!RegClass(mainWindowProc, szClassName, COLOR_WINDOW)) {
-    return false;
-  }
-
-  if (!RegClass(childWindowProc, childClassname, COLOR_WINDOW)) {
     return false;
   }
 
@@ -172,9 +178,16 @@ int WINAPI WinMain(
 
   if (!hwnd) { return false; }
 
-  while (GetMessage(&msg, 0, 0, 0)) {
-    TranslateMessage(&msg);
-    DispatchMessage(&msg);
+  child1Hwnd = GetDlgItem(hwnd, idChild1);
+  HACCEL hAccel = 0;
+
+  while (GetMessage(&msg, 0, 0, 0) > 0) {
+    if (!TranslateMDISysAccel(child1Hwnd, &msg)
+        && !TranslateAccelerator(hwnd, hAccel, &msg)) {
+
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
   }
 
   return msg.wParam;
