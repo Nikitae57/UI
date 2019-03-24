@@ -3,42 +3,11 @@
 #include <stdio.h>
 
 char szClassName[] = "WindowAppClass";
-char childClassname[] = "childClass";
 char buffer[1024];
 
 HINSTANCE hInstance;
 HWND child1Hwnd;
 HWND child2Hwnd;
-
-LRESULT CALLBACK childWindowProc(
-    HWND hwnd,
-    UINT msg,
-    WPARAM wParam,
-    LPARAM lParam
-) {
-  switch (msg) {
-    case WM_CREATE: {
-      CreateWindow(
-          TEXT("EDIT"),
-          (LPSTR) "",
-          WS_BORDER|WS_CHILD|WS_VISIBLE,
-          10, 10,
-          370, 530,
-          hwnd,
-          NULL,
-          NULL,
-          NULL
-      );
-      std::cout << hwnd << std::endl;
-
-      return  0;
-    }
-
-    default: {
-      DefWindowProc(hwnd, msg, wParam, lParam);
-    }
-  }
-}
 
 LRESULT CALLBACK mainWindowProc(
     HWND hwnd,
