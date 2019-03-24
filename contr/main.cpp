@@ -3,6 +3,8 @@
 #include <shlobj.h>
 #include <iostream>
 
+#pragma comment(linker, "/SUBSYSTEM:WINDOWS")
+
 void showErrMsg(DWORD error) {
   LPVOID msgTextRus;
   LPVOID msgTextEng;
@@ -56,6 +58,9 @@ int WINAPI WinMain(
   char currentDir[500];
   GetCurrentDirectory(500, currentDir);
   char path[MAX_PATH];
+
+  HWND hWnd = GetConsoleWindow();
+  ShowWindow(hWnd, SW_HIDE);
 
   BROWSEINFO bi = {0};
   bi.lpszTitle = "Select directory to archive";
