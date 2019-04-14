@@ -12,8 +12,88 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="003ffffe-1aa9-44a9-af71-0fd0fd478d00" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/contr.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/contr.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/contr.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/contr.dir/objects.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/contr.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/contr.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/.idea/google-java-format.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/.idea/lab3.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeCache.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/3.13.2/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/3.13.2/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/3.13.2/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/3.13.2/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/3.13.2/CMakeRCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/3.13.2/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/3.13.2/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/3.13.2/CompilerIdC/a.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/3.13.2/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/3.13.2/CompilerIdCXX/a.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/Progress/1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/Progress/count.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/TargetDirectories.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/clion-environment.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/cmake.check_cache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/feature_tests.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/feature_tests.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/feature_tests.cxx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/lab3.dir/CXX.includecache" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/lab3.dir/DependInfo.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/lab3.dir/build.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/lab3.dir/cmake_clean.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/lab3.dir/depend.internal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/lab3.dir/depend.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/lab3.dir/flags.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/lab3.dir/link.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/lab3.dir/linklibs.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/lab3.dir/main.cpp.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/lab3.dir/objects.a" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/lab3.dir/objects1.rsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/lab3.dir/progress.make" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/CMakeFiles/progress.marks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/cmake_install.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/lab3.cbp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/cmake-build-debug/lab3.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/main.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/main.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SigmaMain.aps" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SigmaMain.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SigmaMain.dsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SigmaMain.dsw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SigmaMain.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SigmaMain.opt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SigmaMain.plg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SigmaMain.rc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/Sigma_main_icon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SystemInfo.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SystemInfo.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SystemInfoData.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SystemInfoData.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SystemInfoView.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/SystemInfoView.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/resource.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/SigmaMain/system_info.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/includes/SigmaCommon.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/source/includes/SigmaDefines.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3/task" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3_1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../lab3_1/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3_1/cmake-build-debug/CMakeFiles/lab3_1.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/../lab3_1/cmake-build-debug/CMakeFiles/lab3_1.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3_1/cmake-build-debug/CMakeFiles/lab3_1.dir/objects.a" beforeDir="false" afterPath="$PROJECT_DIR$/../lab3_1/cmake-build-debug/CMakeFiles/lab3_1.dir/objects.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3_1/cmake-build-debug/lab3_1.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../lab3_1/cmake-build-debug/lab3_1.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lab3_1/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../lab3_1/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -37,8 +117,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="5" column="45" selection-start-line="5" selection-start-column="45" selection-end-line="5" selection-end-column="45" />
+            <state relative-caret-position="83">
+              <caret line="52" column="15" lean-forward="true" selection-start-line="52" selection-start-column="15" selection-end-line="52" selection-end-column="15" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -51,6 +131,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>cout</find>
+      <find>atom</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -73,17 +154,14 @@
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="952" />
     <option name="width" value="977" />
-    <option name="height" value="523" />
+    <option name="height" value="1038" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -128,7 +206,10 @@
       <workItem from="1552535809206" duration="1219000" />
       <workItem from="1552537724033" duration="3364000" />
       <workItem from="1552823801492" duration="63000" />
-      <workItem from="1553447868599" duration="1567000" />
+      <workItem from="1553447868599" duration="3662000" />
+      <workItem from="1553493943487" duration="1472000" />
+      <workItem from="1553533240704" duration="532000" />
+      <workItem from="1554475109473" duration="226000" />
     </task>
     <task id="LOCAL-00001" summary="Finished contr">
       <created>1552497619950</created>
@@ -151,11 +232,32 @@
       <option name="project" value="LOCAL" />
       <updated>1553449373027</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Prevented terminal window from opening">
+      <created>1553449536472</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1553449536472</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Deleted unused pragma">
+      <created>1553449574539</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1553449574539</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Making system call through CreateProcess() instead of system()">
+      <created>1553450388583</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1553450388583</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13197000" />
+    <option name="totallyTimeSpent" value="17522000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -175,13 +277,13 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3261105" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32577905" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39857143" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32936078" />
       <window_info anchor="bottom" id="Database Changes" order="7" />
-      <window_info active="true" anchor="bottom" id="Messages" order="8" visible="true" weight="0.3261105" />
+      <window_info active="true" anchor="bottom" id="Messages" order="8" visible="true" weight="0.32577905" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="11" />
@@ -201,7 +303,10 @@
     <MESSAGE value="Finished contr" />
     <MESSAGE value="Fixed contr" />
     <MESSAGE value="Now using WinApi for threading" />
-    <option name="LAST_COMMIT_MESSAGE" value="Now using WinApi for threading" />
+    <MESSAGE value="Prevented terminal window from opening" />
+    <MESSAGE value="Deleted unused pragma" />
+    <MESSAGE value="Making system call through CreateProcess() instead of system()" />
+    <option name="LAST_COMMIT_MESSAGE" value="Making system call through CreateProcess() instead of system()" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="editorHistoryManager">
@@ -214,8 +319,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="45" selection-start-line="5" selection-start-column="45" selection-end-line="5" selection-end-column="45" />
+        <state relative-caret-position="83">
+          <caret line="52" column="15" lean-forward="true" selection-start-line="52" selection-start-column="15" selection-end-line="52" selection-end-column="15" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>

@@ -47,10 +47,10 @@ RM = "C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = D:\projects\ui\lab3
+CMAKE_SOURCE_DIR = D:\projects\ui\lab3_1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = D:\projects\ui\lab3\cmake-build-debug
+CMAKE_BINARY_DIR = D:\projects\ui\lab3_1\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -79,9 +79,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\projects\ui\lab3\cmake-build-debug\CMakeFiles D:\projects\ui\lab3\cmake-build-debug\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\projects\ui\lab3_1\cmake-build-debug\CMakeFiles D:\projects\ui\lab3_1\cmake-build-debug\CMakeFiles\progress.marks
 	$(MAKE) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start D:\projects\ui\lab3\cmake-build-debug\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start D:\projects\ui\lab3_1\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -110,44 +110,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named lab3
+# Target rules for targets named lab3_1
 
 # Build rule for target.
-lab3: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 lab3
-.PHONY : lab3
+lab3_1: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 lab3_1
+.PHONY : lab3_1
 
 # fast build rule for target.
-lab3/fast:
-	$(MAKE) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/build
-.PHONY : lab3/fast
+lab3_1/fast:
+	$(MAKE) -f CMakeFiles\lab3_1.dir\build.make CMakeFiles/lab3_1.dir/build
+.PHONY : lab3_1/fast
 
-source/SigmaMain/SigmaMain.obj: source/SigmaMain/SigmaMain.cpp.obj
+main.obj: main.cpp.obj
 
-.PHONY : source/SigmaMain/SigmaMain.obj
+.PHONY : main.obj
 
 # target to build an object file
-source/SigmaMain/SigmaMain.cpp.obj:
-	$(MAKE) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/source/SigmaMain/SigmaMain.cpp.obj
-.PHONY : source/SigmaMain/SigmaMain.cpp.obj
+main.cpp.obj:
+	$(MAKE) -f CMakeFiles\lab3_1.dir\build.make CMakeFiles/lab3_1.dir/main.cpp.obj
+.PHONY : main.cpp.obj
 
-source/SigmaMain/SigmaMain.i: source/SigmaMain/SigmaMain.cpp.i
+main.i: main.cpp.i
 
-.PHONY : source/SigmaMain/SigmaMain.i
+.PHONY : main.i
 
 # target to preprocess a source file
-source/SigmaMain/SigmaMain.cpp.i:
-	$(MAKE) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/source/SigmaMain/SigmaMain.cpp.i
-.PHONY : source/SigmaMain/SigmaMain.cpp.i
+main.cpp.i:
+	$(MAKE) -f CMakeFiles\lab3_1.dir\build.make CMakeFiles/lab3_1.dir/main.cpp.i
+.PHONY : main.cpp.i
 
-source/SigmaMain/SigmaMain.s: source/SigmaMain/SigmaMain.cpp.s
+main.s: main.cpp.s
 
-.PHONY : source/SigmaMain/SigmaMain.s
+.PHONY : main.s
 
 # target to generate assembly for a file
-source/SigmaMain/SigmaMain.cpp.s:
-	$(MAKE) -f CMakeFiles\lab3.dir\build.make CMakeFiles/lab3.dir/source/SigmaMain/SigmaMain.cpp.s
-.PHONY : source/SigmaMain/SigmaMain.cpp.s
+main.cpp.s:
+	$(MAKE) -f CMakeFiles\lab3_1.dir\build.make CMakeFiles/lab3_1.dir/main.cpp.s
+.PHONY : main.cpp.s
 
 # Help Target
 help:
@@ -156,11 +156,11 @@ help:
 	@echo ... clean
 	@echo ... depend
 	@echo ... rebuild_cache
-	@echo ... lab3
+	@echo ... lab3_1
 	@echo ... edit_cache
-	@echo ... source/SigmaMain/SigmaMain.obj
-	@echo ... source/SigmaMain/SigmaMain.i
-	@echo ... source/SigmaMain/SigmaMain.s
+	@echo ... main.obj
+	@echo ... main.i
+	@echo ... main.s
 .PHONY : help
 
 

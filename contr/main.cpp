@@ -1,7 +1,6 @@
 #include <windows.h>
 #include <string>
 #include <shlobj.h>
-#include <iostream>
 
 void showErrMsg(DWORD error) {
   LPVOID msgTextRus;
@@ -30,7 +29,6 @@ void showErrMsg(DWORD error) {
   char finalMsg[500];
   sprintf_s(finalMsg, "%d\n%s%s", error, msgTextRus, msgTextEng);
   MessageBox(NULL, finalMsg, NULL, NULL);
-  std::cout << finalMsg << '\n';
 }
 
 void archive(char *path) {
@@ -85,7 +83,7 @@ int WINAPI WinMain(
   archive(path);
 
   DWORD error = GetLastError();
-  if (error != 0 && error != 298) {
+  if (error != 0) {
     showErrMsg(error);
   }
 

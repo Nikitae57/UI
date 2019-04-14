@@ -6,11 +6,13 @@
 
 #IncludeRegexTransform: 
 
-D:/projects/ui/contr/main.cpp
+D:/projects/ui/lab3_1/main.cpp
+iostream
+-
 windows.h
 -
-string
+stdio.h
 -
-shlobj.h
+string
 -
 
