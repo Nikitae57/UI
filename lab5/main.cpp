@@ -75,19 +75,11 @@ void switchToTableMode() {
 }
 
 void inflateListView(char** items, int nItems) {
-  int count = SendMessage(
+  SendMessage(
       llTableFieldsHwnd,
-      LB_GETCOUNT, 0, 0L
+      LB_RESETCONTENT,
+      0, 0L
   );
-
-  while (count > 0) {
-    count = SendMessage(
-        llTableFieldsHwnd,
-        LB_DELETESTRING,
-        (WPARAM) 0,
-        0L
-    );
-  }
 
   for (int i = 0; i < nItems; i++) {
     int pos = (int) SendMessage(
