@@ -208,7 +208,21 @@ void handleWmCommand(
 
     case ID_TABLE_ATTRS_LISTBOX: {
       switch (HIWORD(wParam)) {
-        return;
+        case LBN_DBLCLK: {
+          // selected item index
+          int lbItem = (int) SendMessage(
+              llTableFieldsHwnd,
+              LB_GETCURSEL, 0, 0
+          );
+
+          char buffer[256];
+          SendMessage(
+              llTableFieldsHwnd,
+              LB_GETTEXT,
+              (WPARAM) lbItem,
+              (LPARAM) buffer
+          );
+        }
       }
     }
 
