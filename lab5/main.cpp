@@ -222,6 +222,7 @@ void handleWmCommand(
               (WPARAM) lbItem,
               (LPARAM) buffer
           );
+          std::cout << "Selected table attr: " << buffer << std::endl;
         }
       }
     }

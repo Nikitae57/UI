@@ -32,6 +32,34 @@ static int getTableColumnsCallback(void *NotUsed, int argc, char **argv, char **
   return 0;
 }
 
+void makeSelectQueryWithoutCondition(
+    char *tableName,
+    char **attrs,
+    char *result,
+    int attrsCount
+) {
+  // "SELECT attr FROM tablename"
+  // "SELECT attr1, attr2, attr3 FROM tablename"
+  if (attrsCount == 0) {
+    sprintf(result, "SELECT * FROM %s", tableName);
+    return;
+  }
+
+  std::string tmp = "SELECT ";
+  for (int i = 0; i < attrsCount; i++) {
+    tmp += attrs[i];
+    if (i == attrsCount - 1) {
+      tmp += " ";
+    } else {
+      tmp += ", ";
+    }
+  }
+  tmp += "FROM ";
+  tmp += tableName;
+
+  strcpy(result, tmp.c_str());
+}
+
 char** getTableColumns(const char* tableName, int* colNumber) {
   sqlite3 *db;
   char *zErrMsg = 0;
@@ -44,6 +72,8 @@ char** getTableColumns(const char* tableName, int* colNumber) {
   rc = sqlite3_exec(db, query, getTableColumnsCallback, 0, &zErrMsg);
   sqlite3_close(db);
 
+  std::cout << std::endl << "Table name: " << tableName << std::endl;
+  std::cout << "Table attrs:" << std::endl;
   for (int i = 0; i < currentCol; i++) {
     printf("%s\n", columnNames[i]);
   }
