@@ -21,6 +21,8 @@ HWND llSelectHwnd;
 HWND btnOkHwnd;
 HMENU menuHmenu;
 
+const int ID_TABLE_ATTRS_LISTBOX = 6785;
+
 const UINT_PTR actionQueryMode = 1337;
 const UINT_PTR actionTableMode = 2608;
 
@@ -72,6 +74,35 @@ void switchToTableMode() {
   // TODO implement
 }
 
+void inflateListView(char** items, int nItems) {
+  int count = SendMessage(
+      llTableFieldsHwnd,
+      LB_GETCOUNT, 0, 0L
+  );
+
+  while (count > 0) {
+    count = SendMessage(
+        llTableFieldsHwnd,
+        LB_DELETESTRING,
+        (WPARAM) 0,
+        0L
+    );
+  }
+
+  for (int i = 0; i < nItems; i++) {
+    int pos = (int) SendMessage(
+        llTableFieldsHwnd,
+        LB_ADDSTRING,
+        0,
+        (LPARAM) items[i]
+    );
+
+    SendMessage(llTableFieldsHwnd, LB_SETITEMDATA, pos, (LPARAM) i);
+  }
+
+  SetFocus(llTableFieldsHwnd);
+}
+
 LRESULT CALLBACK etTableProc(
     HWND hwnd,
     UINT msg,
@@ -85,7 +116,7 @@ LRESULT CALLBACK etTableProc(
         GetWindowText(hwnd, buffer, 2048);
         int colNumber;
         char** result = getTableColumns(buffer, &colNumber);
-
+        inflateListView(result, colNumber);
       }
 
       return 0;
@@ -98,28 +129,20 @@ LRESULT CALLBACK etTableProc(
 }
 
 HWND CreateTableAttrListView(HWND hWndParent, UINT uId) {
-  INITCOMMONCONTROLSEX icex;
-  icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
-  icex.dwICC  = ICC_LISTVIEW_CLASSES;
-  InitCommonControlsEx(&icex);
-
-  HWND hWndLV = CreateWindow(
-      WC_LISTVIEW,
-      "",
-      WS_CHILD | LVS_REPORT | WS_VISIBLE,
+  HWND listbox = CreateWindow(
+      TEXT("listbox"),
+      TEXT("tableAttrs"),
+      WS_CHILD | WS_VISIBLE | LBS_STANDARD | WS_VSCROLL | WS_BORDER
+      | LBS_NOTIFY,
       220, 10,
-      200, 32,
+      200, 150,
       hWndParent,
-      (HMENU)uId,
+      (HMENU) ID_TABLE_ATTRS_LISTBOX,
       hInstance,
       NULL
   );
 
-  // Чтобы определялись строка (item) и столбец (subitem) обязательно устанавливаем
-  // расширенный стиль LVS_EX_FULLROWSELECT.
-  ListView_SetExtendedListViewStyleEx(hWndLV, 0, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-
-  return (hWndLV);
+  return listbox;
 }
 
 HWND CreateSelectListView(HWND parent, UINT uId) {
@@ -189,6 +212,12 @@ void handleWmCommand(
     case actionQueryMode: {
       switchToQueryMode();
       return;
+    }
+
+    case ID_TABLE_ATTRS_LISTBOX: {
+      switch (HIWORD(wParam)) {
+        return;
+      }
     }
 
     case actionTableMode: {
