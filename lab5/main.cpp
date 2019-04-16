@@ -27,6 +27,7 @@ const UINT_PTR actionQueryMode = 1337;
 const UINT_PTR actionTableMode = 2608;
 
 char buffer[2048];
+bool attrBeenSelected = false;
 
 HINSTANCE hInstance;
 
@@ -194,6 +195,33 @@ void initUi(HWND hwnd) {
   llSelectHwnd = CreateSelectListView(hwnd, 2);
 }
 
+void tableAttrSelected() {
+  // selected item index
+  int lbItem = (int) SendMessage(
+      llTableFieldsHwnd,
+      LB_GETCURSEL, 0, 0
+  );
+
+  char attrName[256];
+  SendMessage(
+      llTableFieldsHwnd,
+      LB_GETTEXT,
+      (WPARAM) lbItem,
+      (LPARAM) attrName
+  );
+  std::cout << "Selected table attr: " << attrName << std::endl;
+
+  GetWindowText(etSelectQueryHwnd, buffer, 2048);
+  char tmp[2048];
+  if (strlen(buffer) == 0) {
+    sprintf(tmp, "SELECT %s ", attrName);
+  } else {
+    sprintf(tmp, "%s, %s", buffer, attrName);
+  }
+  SetWindowText(etSelectQueryHwnd, tmp);
+  attrBeenSelected = true;
+}
+
 void handleWmCommand(
     HWND hwnd,
     UINT msg,
@@ -209,20 +237,7 @@ void handleWmCommand(
     case ID_TABLE_ATTRS_LISTBOX: {
       switch (HIWORD(wParam)) {
         case LBN_DBLCLK: {
-          // selected item index
-          int lbItem = (int) SendMessage(
-              llTableFieldsHwnd,
-              LB_GETCURSEL, 0, 0
-          );
-
-          char buffer[256];
-          SendMessage(
-              llTableFieldsHwnd,
-              LB_GETTEXT,
-              (WPARAM) lbItem,
-              (LPARAM) buffer
-          );
-          std::cout << "Selected table attr: " << buffer << std::endl;
+          tableAttrSelected();
         }
       }
     }
@@ -297,7 +312,7 @@ int WINAPI WinMain(
 
   if (!hwnd) { return false; }
 
-  while (GetMessage(&msg, 0, 0, 0) > 0) {
+   while (GetMessage(&msg, 0, 0, 0) > 0) {
     TranslateMessage(&msg);
     DispatchMessage(&msg);
   }
