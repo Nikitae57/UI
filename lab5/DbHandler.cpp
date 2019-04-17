@@ -6,12 +6,27 @@
 char** columnNames = nullptr;
 int currentCol = 0;
 
-static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
-  int i;
-  for(i = 0; i < argc; i++) {
-    printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+char*** selectResult = nullptr;
+int colNumber = 0;
+int currentRow = 0;
+
+static int selectCallback(void *NotUsed, int argc, char **argv, char **azColName) {
+  if (selectResult == nullptr) {
+    selectResult = (char***) malloc(sizeof(char**) * 1000);
+    for (int i = 0; i < 1000; i++) {
+      selectResult[i] = (char**) malloc(sizeof(char*) * argc);
+      for (int j = 0; j < argc; j++) {
+        selectResult[i][j] = (char*) malloc(sizeof(char) * 200);
+      }
+    }
+    colNumber = argc;
   }
-  printf("\n");
+
+  for (int i = 0; i < argc; i++) {
+    strcpy(selectResult[currentRow][i], argv[i]);
+  }
+
+  currentRow++;
 
   return 0;
 }
@@ -38,8 +53,6 @@ void makeSelectQueryWithoutCondition(
     char *result,
     int attrsCount
 ) {
-  // "SELECT attr FROM tablename"
-  // "SELECT attr1, attr2, attr3 FROM tablename"
   if (attrsCount == 0) {
     sprintf(result, "SELECT * FROM %s", tableName);
     return;
@@ -60,7 +73,51 @@ void makeSelectQueryWithoutCondition(
   strcpy(result, tmp.c_str());
 }
 
-char** getTableColumns(const char* tableName, int* colNumber) {
+char ***makeSelectQuery(
+    char *selectStatement,
+    int *rowNumber
+) {
+  sqlite3 *db;
+  char *zErrMsg = 0;
+  int rc;
+
+  rc = sqlite3_open("test.db", &db);
+  rc = sqlite3_exec(
+      db,
+      selectStatement,
+      selectCallback,
+      0, &zErrMsg
+  );
+  sqlite3_close(db);
+
+  char*** result = (char***) malloc(sizeof(char**) * currentRow);
+  for (int i = 0; i < currentRow; i++) {
+    result[i] = (char**) malloc(sizeof(char*) * colNumber);
+    for (int j = 0; j < colNumber; j++) {
+      result[i][j] = (char*)
+          malloc(sizeof(char) * strlen(selectResult[i][j]));
+      strcpy(result[i][j], selectResult[i][j]);
+    }
+  }
+  *rowNumber = currentRow;
+
+  if (selectResult != nullptr) {
+    for (int i = 0; i < 1000; i++) {
+      for (int j = 0; j < colNumber; j++) {
+        free(selectResult[i][j]);
+      }
+      free(selectResult[i]);
+    }
+    free(selectResult);
+  }
+  selectResult = nullptr;
+  currentRow = 0;
+  colNumber = 0;
+
+  return result;
+}
+
+char** getTableColumns(const char* tableName, int* columnNumber) {
   sqlite3 *db;
   char *zErrMsg = 0;
   int rc;
@@ -87,9 +144,10 @@ char** getTableColumns(const char* tableName, int* colNumber) {
   for (int i = 0; i < currentCol; i++) {
     free(columnNames[i]);
   }
+
   free(columnNames);
   columnNames = nullptr;
-  *colNumber = currentCol;
+  *columnNumber = currentCol;
   currentCol = 0;
 
   return result;

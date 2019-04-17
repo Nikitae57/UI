@@ -8,4 +8,9 @@ void makeSelectQueryWithoutCondition(
     char *result,
     int attrsCount
 );
+
+char ***makeSelectQuery(
+    char *selectStatement,
+    int *rowNumber
+);
 #endif //LAB5_DBHANDLER_H
