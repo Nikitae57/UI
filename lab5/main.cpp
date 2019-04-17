@@ -22,12 +22,20 @@ HWND btnOkHwnd;
 HMENU menuHmenu;
 
 const int ID_TABLE_ATTRS_LISTBOX = 6785;
+const int ID_SELECT_TABLE = 5623;
+const int ID_OK_BTN = 2908;
 
 const UINT_PTR actionQueryMode = 1337;
 const UINT_PTR actionTableMode = 2608;
 
 char buffer[2048];
 bool attrBeenSelected = false;
+
+int selectedColumnsNumber = 0;
+char **selectedColumns;
+
+char **tableColumns;
+int tableColumnsNumber;
 
 HINSTANCE hInstance;
 
@@ -75,7 +83,7 @@ void switchToTableMode() {
   // TODO implement
 }
 
-void inflateListView(char** items, int nItems) {
+void inflateTableAttrsLb(char **items, int nItems) {
   SendMessage(
       llTableFieldsHwnd,
       LB_RESETCONTENT,
@@ -104,12 +112,10 @@ LRESULT CALLBACK etTableProc(
 ) {
   switch (msg) {
     case WM_KEYDOWN: {
-      //std::cout << "keydown\n";
       if (wParam == VK_RETURN) {
         GetWindowText(hwnd, buffer, 2048);
-        int colNumber;
-        char** result = getTableColumns(buffer, &colNumber);
-        inflateListView(result, colNumber);
+        tableColumns = getTableColumns(buffer, &tableColumnsNumber);
+        inflateTableAttrsLb(tableColumns, tableColumnsNumber);
       }
 
       return 0;
@@ -138,27 +144,35 @@ HWND CreateTableAttrListView(HWND hWndParent, UINT uId) {
   return listbox;
 }
 
+void inflateLvHeader(char** titles, int columnsNumber) {
+  for (int i = 0; i < columnsNumber; i++) {
+    LV_COLUMN col;
+    col.mask = LVCF_TEXT | LVCF_WIDTH;
+    col.cx = 100;
+    col.pszText = titles[i];
+    ListView_InsertColumn(llSelectHwnd, 0, &col);
+  }
+}
+
 HWND CreateSelectListView(HWND parent, UINT uId) {
   INITCOMMONCONTROLSEX icex;
   icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
   icex.dwICC  = ICC_LISTVIEW_CLASSES;
   InitCommonControlsEx(&icex);
 
-  HWND hWndLV = CreateWindow(
+  HWND hWndLV = CreateWindowEx(
+      0L,
       WC_LISTVIEW,
       "",
-      WS_CHILD | LVS_REPORT | WS_VISIBLE,
+      WS_VISIBLE | WS_CHILD | WS_BORDER | LVS_REPORT |
+      LVS_EDITLABELS | LVS_NOSORTHEADER,
       10, 162,
       600, 200,
       parent,
-      (HMENU)uId,
+      (HMENU) ID_SELECT_TABLE,
       hInstance,
       NULL
   );
-
-  // Чтобы определялись строка (item) и столбец (subitem) обязательно устанавливаем
-  // расширенный стиль LVS_EX_FULLROWSELECT.
-  ListView_SetExtendedListViewStyleEx(hWndLV, 0, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 
   return (hWndLV);
 }
@@ -193,6 +207,17 @@ void initUi(HWND hwnd) {
 
   llTableFieldsHwnd = CreateTableAttrListView(hwnd, 1);
   llSelectHwnd = CreateSelectListView(hwnd, 2);
+  btnOkHwnd = CreateWindow(
+      TEXT("BUTTON"),
+      TEXT("OK"),
+      WS_CHILD | WS_VISIBLE,
+      430, 10,
+      50, 30,
+      hwnd,
+      (HMENU) ID_OK_BTN,
+      hInstance,
+      NULL
+  );
 }
 
 void tableAttrSelected() {
@@ -211,6 +236,15 @@ void tableAttrSelected() {
   );
   std::cout << "Selected table attr: " << attrName << std::endl;
 
+  if (selectedColumnsNumber <= 0) {
+    selectedColumns = (char **) malloc(sizeof(char *) * 100);
+  }
+
+  selectedColumns[selectedColumnsNumber] = (char*)
+    malloc(sizeof(char) * strlen(attrName));
+  strcpy(selectedColumns[selectedColumnsNumber], attrName);
+  selectedColumnsNumber++;
+
   GetWindowText(etSelectQueryHwnd, buffer, 2048);
   char tmp[2048];
   if (strlen(buffer) == 0) {
@@ -220,6 +254,20 @@ void tableAttrSelected() {
   }
   SetWindowText(etSelectQueryHwnd, tmp);
   attrBeenSelected = true;
+}
+
+void finishSelectQuery() {
+  char tmp[2048];
+  char tableName[256];
+  GetWindowText(etTableNameHwnd, tableName, 256);
+
+  if (attrBeenSelected) {
+    GetWindowText(etSelectQueryHwnd, buffer, 2048);
+    sprintf(tmp, "%s FROM %s", buffer, tableName);
+  } else {
+    sprintf(tmp, "SELECT * FROM %s", tableName);
+  }
+  SetWindowText(etSelectQueryHwnd, tmp);
 }
 
 void handleWmCommand(
@@ -240,6 +288,17 @@ void handleWmCommand(
           tableAttrSelected();
         }
       }
+      return;
+    }
+
+    case ID_OK_BTN: {
+      finishSelectQuery();
+      if (selectedColumnsNumber > 0) {
+        inflateLvHeader(selectedColumns, selectedColumnsNumber);
+      } else {
+        inflateLvHeader(tableColumns, tableColumnsNumber);
+      }
+      return;
     }
 
     case actionTableMode: {
