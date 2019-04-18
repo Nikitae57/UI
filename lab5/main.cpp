@@ -4,6 +4,7 @@
 #include <string>
 #include <commctrl.h>
 #include <psapi.h>
+#include <unistd.h>
 
 #include "DbHandler.h"
 
@@ -147,10 +148,11 @@ HWND CreateTableAttrListView(HWND hWndParent, UINT uId) {
 void inflateLvHeader(char** titles, int columnsNumber) {
   for (int i = 0; i < columnsNumber; i++) {
     LV_COLUMN col;
-    col.mask = LVCF_TEXT | LVCF_WIDTH;
+    col.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM;
     col.cx = 100;
     col.pszText = titles[i];
-    ListView_InsertColumn(llSelectHwnd, 0, &col);
+    col.iSubItem = i;
+    ListView_InsertColumn(llSelectHwnd, i, &col);
   }
 }
 
@@ -270,6 +272,29 @@ void finishSelectQuery() {
   SetWindowText(etSelectQueryHwnd, tmp);
 }
 
+void inflateSelectLvBody(
+    char*** selectResult,
+    int rowCount,
+    int colCount
+) {
+
+  LV_ITEM item;
+  memset(&item, 0, sizeof(LV_ITEM));
+  item.mask = LVIF_TEXT;
+  for (int i = 0; i < rowCount; i++) {
+    item.iItem = i;
+    for (int j = 0; j < colCount; j++) {
+      item.iSubItem = j;
+      item.pszText = selectResult[i][j];
+      item.cchTextMax = 256;
+      ListView_InsertItem(llSelectHwnd, &item);
+      ListView_SetItem(llSelectHwnd, &item);
+//      std::cout << selectResult[i][j] << " ";
+    }
+//    std::cout << std::endl;
+  }
+}
+
 void handleWmCommand(
     HWND hwnd,
     UINT msg,
@@ -293,11 +318,22 @@ void handleWmCommand(
 
     case ID_OK_BTN: {
       finishSelectQuery();
+      int columnsToInflate;
       if (selectedColumnsNumber > 0) {
         inflateLvHeader(selectedColumns, selectedColumnsNumber);
+        columnsToInflate = selectedColumnsNumber;
       } else {
         inflateLvHeader(tableColumns, tableColumnsNumber);
+        columnsToInflate = tableColumnsNumber;
       }
+
+      char* selectStatement = (char*) malloc(sizeof(char) * 500);
+      GetWindowText(etSelectQueryHwnd, selectStatement, 500);
+
+      int rowCount;
+      char*** selectResult = makeSelectQuery(selectStatement, &rowCount);
+      inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
+
       return;
     }
 

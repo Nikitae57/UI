@@ -90,12 +90,12 @@ char ***makeSelectQuery(
   );
   sqlite3_close(db);
 
-  char*** result = (char***) malloc(sizeof(char**) * currentRow);
+  char*** result = (char***) malloc(sizeof(char**) * (currentRow + 1));
   for (int i = 0; i < currentRow; i++) {
-    result[i] = (char**) malloc(sizeof(char*) * colNumber);
+    result[i] = (char**) malloc(sizeof(char*) * (colNumber + 1));
     for (int j = 0; j < colNumber; j++) {
       result[i][j] = (char*)
-          malloc(sizeof(char) * strlen(selectResult[i][j]));
+          malloc(sizeof(char) * strlen(selectResult[i][j]) + 1);
       strcpy(result[i][j], selectResult[i][j]);
     }
   }
@@ -123,7 +123,10 @@ char** getTableColumns(const char* tableName, int* columnNumber) {
   int rc;
 
   rc = sqlite3_open("test.db", &db);
-  char* query = (char*) malloc(sizeof(char) * (strlen("PRAGMA table_info()") + strlen(tableName)));
+  char* query = (char*) malloc(
+      sizeof(char) * (strlen("PRAGMA table_info()")
+      + strlen(tableName)) + 2
+  );
   sprintf(query, "PRAGMA table_info(%s)", tableName);
 
   rc = sqlite3_exec(db, query, getTableColumnsCallback, 0, &zErrMsg);
@@ -135,9 +138,9 @@ char** getTableColumns(const char* tableName, int* columnNumber) {
     printf("%s\n", columnNames[i]);
   }
 
-  char** result = (char**) (malloc(sizeof(char*) * currentCol));
+  char** result = (char**) (malloc(sizeof(char*) * (currentCol + 1)));
   for (int i = 0; i < currentCol; i++) {
-    result[i] = (char*) malloc(sizeof(char) * strlen(columnNames[i]));
+    result[i] = (char*) malloc(sizeof(char) * strlen(columnNames[i]) + 1);
     strcpy(result[i], columnNames[i]);
   }
 
