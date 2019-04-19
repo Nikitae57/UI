@@ -5,6 +5,7 @@
 #include <commctrl.h>
 #include <psapi.h>
 #include <unistd.h>
+#include <windowsx.h>
 
 #include "DbHandler.h"
 
@@ -16,15 +17,21 @@ const char *llTableFieldsClass = "llTableFieldsClass";
 WNDPROC etTableNameProc;
 
 HWND etTableNameHwnd;
-HWND etSelectQueryHwnd;
 HWND llTableFieldsHwnd;
+HWND etSelectQueryHwnd;
 HWND llSelectHwnd;
 HWND btnOkHwnd;
+
+HWND btnNextHwnd;
+HWND etComparisonValue;
+HWND llComparisonSigns;
+
 HMENU menuHmenu;
 
 const int ID_TABLE_ATTRS_LISTBOX = 6785;
 const int ID_SELECT_TABLE = 5623;
 const int ID_OK_BTN = 2908;
+const int ID_NEXT_BTN = 8904;
 
 const UINT_PTR actionQueryMode = 1337;
 const UINT_PTR actionTableMode = 2608;
@@ -220,6 +227,50 @@ void initUi(HWND hwnd) {
       hInstance,
       NULL
   );
+
+  btnNextHwnd = CreateWindow(
+      TEXT("BUTTON"),
+      TEXT(">>"),
+      WS_CHILD | WS_VISIBLE,
+      430, 50,
+      50, 30,
+      hwnd,
+      (HMENU) ID_NEXT_BTN,
+      hInstance,
+      NULL
+  );
+
+  etComparisonValue = CreateWindow(
+      TEXT("EDIT"),
+      NULL,
+      WS_BORDER | WS_CHILD | WS_VISIBLE,
+      430, 90,
+      50, 30,
+      hwnd,
+      NULL,
+      hInstance,
+      NULL
+  );
+
+  llComparisonSigns = CreateWindow(
+      TEXT("COMBOBOX"),
+      TEXT("Attr operation"),
+      WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST,
+      490, 10,
+      50, 200,
+      hwnd,
+      NULL,
+      hInstance,
+      NULL
+  );
+
+  ComboBox_AddString(llComparisonSigns, TEXT(">"));
+  ComboBox_AddString(llComparisonSigns, TEXT(">="));
+  ComboBox_AddString(llComparisonSigns, TEXT("<"));
+  ComboBox_AddString(llComparisonSigns, TEXT("<="));
+  ComboBox_AddString(llComparisonSigns, TEXT("="));
+  ComboBox_AddString(llComparisonSigns, TEXT("AND"));
+  ComboBox_AddString(llComparisonSigns, TEXT("OR"));
 }
 
 void tableAttrSelected() {

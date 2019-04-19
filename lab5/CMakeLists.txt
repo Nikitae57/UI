@@ -12,7 +12,7 @@ set(CMAKE_CXX_FLAGS
 include_directories("D:\\projects\\ui\\lab5\\db")
 link_directories("D:\\projects\\ui\\lab5\\db")
 
-add_executable(lab5 main.cpp DbHandler.cpp DbHandler.h)
+add_executable(lab5 main.cpp DbHandler.cpp DbHandler.h StateHandler.cpp)
 target_link_libraries(lab5
     sqlite3.dll
     comctl32
