@@ -1,5 +1,5 @@
-#include <iostream>
 #include <windows.h>
+#include <iostream>
 #include <stdio.h>
 #include <string>
 #include <commctrl.h>
@@ -8,44 +8,8 @@
 #include <windowsx.h>
 
 #include "DbHandler.h"
-
-const char *mainWindowClass = "WindowAppClass";
-const char *etTableNameClass = "etTableNameClass";
-const char *etSelectQueryClass = "etSelectQueryClass";
-const char *llTableFieldsClass = "llTableFieldsClass";
-
-WNDPROC etTableNameProc;
-
-HWND etTableNameHwnd;
-HWND llTableFieldsHwnd;
-HWND etSelectQueryHwnd;
-HWND llSelectHwnd;
-HWND btnOkHwnd;
-
-HWND btnNextHwnd;
-HWND etComparisonValue;
-HWND llComparisonSigns;
-
-HMENU menuHmenu;
-
-const int ID_TABLE_ATTRS_LISTBOX = 6785;
-const int ID_SELECT_TABLE = 5623;
-const int ID_OK_BTN = 2908;
-const int ID_NEXT_BTN = 8904;
-
-const UINT_PTR actionQueryMode = 1337;
-const UINT_PTR actionTableMode = 2608;
-
-char buffer[2048];
-bool attrBeenSelected = false;
-
-int selectedColumnsNumber = 0;
-char **selectedColumns;
-
-char **tableColumns;
-int tableColumnsNumber;
-
-HINSTANCE hInstance;
+#include "main.h"
+#include "StateHandler.h"
 
 LRESULT CALLBACK mainWindowProc(
     HWND hwnd,
@@ -240,7 +204,7 @@ void initUi(HWND hwnd) {
       NULL
   );
 
-  etComparisonValue = CreateWindow(
+  etComparisonValueHwnd = CreateWindow(
       TEXT("EDIT"),
       NULL,
       WS_BORDER | WS_CHILD | WS_VISIBLE,
@@ -252,7 +216,7 @@ void initUi(HWND hwnd) {
       NULL
   );
 
-  llComparisonSigns = CreateWindow(
+  llComparisonSignsHwnd = CreateWindow(
       TEXT("COMBOBOX"),
       TEXT("Attr operation"),
       WS_CHILD | WS_VISIBLE | CBS_DROPDOWNLIST,
@@ -264,13 +228,24 @@ void initUi(HWND hwnd) {
       NULL
   );
 
-  ComboBox_AddString(llComparisonSigns, TEXT(">"));
-  ComboBox_AddString(llComparisonSigns, TEXT(">="));
-  ComboBox_AddString(llComparisonSigns, TEXT("<"));
-  ComboBox_AddString(llComparisonSigns, TEXT("<="));
-  ComboBox_AddString(llComparisonSigns, TEXT("="));
-  ComboBox_AddString(llComparisonSigns, TEXT("AND"));
-  ComboBox_AddString(llComparisonSigns, TEXT("OR"));
+  ComboBox_AddString(llComparisonSignsHwnd, TEXT(">"));
+  ComboBox_AddString(llComparisonSignsHwnd, TEXT(">="));
+  ComboBox_AddString(llComparisonSignsHwnd, TEXT("<"));
+  ComboBox_AddString(llComparisonSignsHwnd, TEXT("<="));
+  ComboBox_AddString(llComparisonSignsHwnd, TEXT("="));
+  ComboBox_AddString(llComparisonSignsHwnd, TEXT("AND"));
+  ComboBox_AddString(llComparisonSignsHwnd, TEXT("OR"));
+
+  initStateHandler(
+      etTableNameHwnd,
+      llTableFieldsHwnd,
+      etSelectQueryHwnd,
+      llSelectHwnd,
+      btnOkHwnd,
+      btnNextHwnd,
+      etComparisonValueHwnd,
+      llComparisonSignsHwnd
+  );
 }
 
 void tableAttrSelected() {
@@ -385,6 +360,12 @@ void handleWmCommand(
       char*** selectResult = makeSelectQuery(selectStatement, &rowCount);
       inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
 
+      return;
+    }
+
+    case ID_NEXT_BTN: {
+      struct FIRST_STATE st;
+      switchState(st);
       return;
     }
 
