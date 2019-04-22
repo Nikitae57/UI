@@ -90,6 +90,11 @@ char ***makeSelectQuery(
   );
   sqlite3_close(db);
 
+  if (rc != SQLITE_OK) {
+	  sqlite3_free(zErrMsg);
+	  return NULL;
+  }
+
   char*** result = (char***) malloc(sizeof(char**) * (currentRow + 1));
   for (int i = 0; i < currentRow; i++) {
     result[i] = (char**) malloc(sizeof(char*) * (colNumber + 1));
@@ -132,6 +137,10 @@ char** getTableColumns(const char* tableName, int* columnNumber) {
   rc = sqlite3_exec(db, query, getTableColumnsCallback, 0, &zErrMsg);
   sqlite3_close(db);
 
+  if (rc != SQLITE_OK) {
+	  sqlite3_free(zErrMsg);
+	  return NULL;
+  }
   std::cout << std::endl << "Table name: " << tableName << std::endl;
   std::cout << "Table attrs:" << std::endl;
   for (int i = 0; i < currentCol; i++) {

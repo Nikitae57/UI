@@ -48,11 +48,15 @@ HMENU initializeMenu(HWND parent) {
 }
 
 void switchToQueryMode() {
-  // TODO implement
+	struct SELECT_TABLE_STATE_9 st9;
+	switchState(st9);
+	currentState = 9;
 }
 
 void switchToTableMode() {
-  // TODO implement
+	SELECT_TABLE_STATE_2 st;
+	switchState(st);
+	currentState = 2;
 }
 
 void inflateTableAttrsLb(char **items, int nItems) {
@@ -85,9 +89,46 @@ LRESULT CALLBACK etTableProc(
   switch (msg) {
     case WM_KEYDOWN: {
       if (wParam == VK_RETURN) {
-        GetWindowText(hwnd, buffer, 2048);
-        tableColumns = getTableColumns(buffer, &tableColumnsNumber);
-        inflateTableAttrsLb(tableColumns, tableColumnsNumber);
+		  if (currentState == 2) {
+			  CONNECT_TO_BD_STATE_3 st;
+			  switchState(st);
+			  currentState = 3;
+			  GetWindowText(hwnd, buffer, 2048);
+			  tableColumns = getTableColumns(buffer, &tableColumnsNumber);
+			  if (tableColumns != NULL && tableColumnsNumber > 0) {
+				  SELECT_ATTRIBUTES_5 st5;
+				  switchState(st5);
+				  currentState = 5;
+				  inflateTableAttrsLb(tableColumns, tableColumnsNumber);
+			  }
+			  else {
+				  FAILED_CONNECT_STATE_4 st4;
+				  switchState(st4);
+				  SELECT_TABLE_STATE_2 st2;
+				  switchState(st2);
+				  currentState = 2;
+			  }
+		  }
+		  else if (currentState == 9) {
+			  CONNECT_TO_BD_STATE_10 st10;
+			  switchState(st10);
+			  currentState = 10;
+			  GetWindowText(hwnd, buffer, 2048);
+			  tableColumns = getTableColumns(buffer, &tableColumnsNumber);
+			  if (tableColumns != NULL && tableColumnsNumber > 0) {
+				  SELECT_ATTRIBUTES_12 st12;
+				  switchState(st12);
+				  currentState = 12;
+				  inflateTableAttrsLb(tableColumns, tableColumnsNumber);
+			  }
+			  else {
+				  FAILED_CONNECT_STATE_11 st11;
+				  switchState(st11);
+				  SELECT_TABLE_STATE_9 st9;
+				  switchState(st9);
+				  currentState = 9;
+			  }
+		  }
       }
 
       return 0;
@@ -97,6 +138,28 @@ LRESULT CALLBACK etTableProc(
       return CallWindowProc(etTableNameProc, hwnd, msg, wParam, lParam);
     }
   }
+}
+
+void ResetContext() {
+	attrBeenSelected = false;
+	if (selectedColumnsNumber > 0) {
+		for (int i = 0; i < selectedColumnsNumber; i++) {
+			ListView_DeleteColumn(llSelectHwnd, 0);
+		}
+	}
+	else {
+		for (int i = 0; i < tableColumnsNumber; i++) {
+			ListView_DeleteColumn(llSelectHwnd, 0);
+		}
+	}
+	if (tableColumns != NULL) {
+		for (int i = 0; i < tableColumnsNumber; i++) {
+			free(tableColumns[i]);
+		}
+		free(tableColumns);
+	}
+	tableColumnsNumber = 0;
+	selectedColumnsNumber = 0;
 }
 
 HWND CreateTableAttrListView(HWND hWndParent, UINT uId) {
@@ -228,15 +291,8 @@ void initUi(HWND hwnd) {
       NULL
   );
 
-  ComboBox_AddString(llComparisonSignsHwnd, TEXT(">"));
-  ComboBox_AddString(llComparisonSignsHwnd, TEXT(">="));
-  ComboBox_AddString(llComparisonSignsHwnd, TEXT("<"));
-  ComboBox_AddString(llComparisonSignsHwnd, TEXT("<="));
-  ComboBox_AddString(llComparisonSignsHwnd, TEXT("="));
-  ComboBox_AddString(llComparisonSignsHwnd, TEXT("AND"));
-  ComboBox_AddString(llComparisonSignsHwnd, TEXT("OR"));
-
   initStateHandler(
+	  hwnd,
       etTableNameHwnd,
       llTableFieldsHwnd,
       etSelectQueryHwnd,
@@ -244,7 +300,8 @@ void initUi(HWND hwnd) {
       btnOkHwnd,
       btnNextHwnd,
       etComparisonValueHwnd,
-      llComparisonSignsHwnd
+      llComparisonSignsHwnd,
+	  menuHmenu
   );
 }
 
@@ -284,6 +341,26 @@ void tableAttrSelected() {
   attrBeenSelected = true;
 }
 
+void addAttributeToQuery() {
+	int lbItem = (int)SendMessage(
+		llTableFieldsHwnd,
+		LB_GETCURSEL, 0, 0
+	);
+
+	char attrName[256];
+	SendMessage(
+		llTableFieldsHwnd,
+		LB_GETTEXT,
+		(WPARAM)lbItem,
+		(LPARAM)attrName
+	);
+
+	GetWindowText(etSelectQueryHwnd, buffer, 2048);
+	char tmp[2048];
+	sprintf(tmp, "%s %s", buffer, attrName);
+	SetWindowText(etSelectQueryHwnd, tmp);
+}
+
 void finishSelectQuery() {
   char tmp[2048];
   char tableName[256];
@@ -296,6 +373,45 @@ void finishSelectQuery() {
     sprintf(tmp, "SELECT * FROM %s", tableName);
   }
   SetWindowText(etSelectQueryHwnd, tmp);
+}
+
+void addSectionFromAndWhere() {
+	char tmp[2048];
+	char tableName[256];
+	GetWindowText(etTableNameHwnd, tableName, 256);
+
+	if (attrBeenSelected) {
+		GetWindowText(etSelectQueryHwnd, buffer, 2048);
+		sprintf(tmp, "%s FROM %s WHERE", buffer, tableName);
+	}
+	else {
+		sprintf(tmp, "SELECT * FROM %s WHERE", tableName);
+	}
+	SetWindowText(etSelectQueryHwnd, tmp);
+}
+
+void addComboBoxItem() {
+	char tmp[2048];
+	char sign[10];
+	GetWindowText(etSelectQueryHwnd, buffer, 2048);
+	ComboBox_GetText(llComparisonSignsHwnd, sign, 10);
+	sprintf(tmp, "%s %s", buffer, sign);
+	SetWindowText(etSelectQueryHwnd, tmp);
+}
+
+bool addComparisonValue() {
+	char value[256];
+	Edit_GetText(etComparisonValueHwnd, value, 256);
+	if (strcmp(value, "") == 0) {
+		return false;
+	}
+	else {
+		char tmp[2048];
+		GetWindowText(etSelectQueryHwnd, buffer, 2048);
+		sprintf(tmp, "%s %s", buffer, value);
+		SetWindowText(etSelectQueryHwnd, tmp);
+		return true;
+	}
 }
 
 void inflateSelectLvBody(
@@ -315,9 +431,7 @@ void inflateSelectLvBody(
       item.cchTextMax = 256;
       ListView_InsertItem(llSelectHwnd, &item);
       ListView_SetItem(llSelectHwnd, &item);
-//      std::cout << selectResult[i][j] << " ";
     }
-//    std::cout << std::endl;
   }
 }
 
@@ -336,37 +450,148 @@ void handleWmCommand(
     case ID_TABLE_ATTRS_LISTBOX: {
       switch (HIWORD(wParam)) {
         case LBN_DBLCLK: {
-          tableAttrSelected();
+			if (currentState == 5 || currentState == 12) {
+				tableAttrSelected();
+			}
+			else if (currentState == 16) {
+				addAttributeToQuery();
+				struct SELECT_COMPARISON_SIGN_STATE_17 st17;
+				switchState(st17);
+				currentState = 17;
+			}
+          
         }
       }
       return;
     }
 
     case ID_OK_BTN: {
-      finishSelectQuery();
-      int columnsToInflate;
-      if (selectedColumnsNumber > 0) {
-        inflateLvHeader(selectedColumns, selectedColumnsNumber);
-        columnsToInflate = selectedColumnsNumber;
-      } else {
-        inflateLvHeader(tableColumns, tableColumnsNumber);
-        columnsToInflate = tableColumnsNumber;
-      }
+		if (currentState == 5) {
+			struct CONNECT_TO_BD_STATE_6 st;
+			switchState(st);
+			currentState = 6;
+			finishSelectQuery();
+			int columnsToInflate;
+			if (selectedColumnsNumber > 0) {
+				inflateLvHeader(selectedColumns, selectedColumnsNumber);
+				columnsToInflate = selectedColumnsNumber;
+			}
+			else {
+				inflateLvHeader(tableColumns, tableColumnsNumber);
+				columnsToInflate = tableColumnsNumber;
+			}
 
-      char* selectStatement = (char*) malloc(sizeof(char) * 500);
-      GetWindowText(etSelectQueryHwnd, selectStatement, 500);
+			char* selectStatement = (char*)malloc(sizeof(char) * 500);
+			GetWindowText(etSelectQueryHwnd, selectStatement, 500);
 
-      int rowCount;
-      char*** selectResult = makeSelectQuery(selectStatement, &rowCount);
-      inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
+			int rowCount;
+			char*** selectResult = makeSelectQuery(selectStatement, &rowCount);
+			free(selectStatement);
+			if (selectResult != NULL) {
+				OUTPUT_DATA_STATE_8 st8;
+				switchState(st8);
+				currentState = 8;
+				inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
+				for (int i = 0; i < rowCount; i++) {
+					for (int j = 0; j < selectedColumnsNumber; j++) {
+						free(selectResult[i][j]);
+					}
+					free(selectResult[i]);
+				}
+				free(selectResult);
+			}
+			else {
+				FAILED_CONNECT_STATE_7 st7;
+				switchState(st7);
+				SELECT_TABLE_STATE_2 st2;
+				switchState(st2);
+				currentState = 2;
+				ResetContext();
+			}
+		}
+		else if (currentState == 8 || currentState == 15) {
+			SELECT_MODE_STATE_1 st;
+			switchState(st);
+			currentState = 1;
+			ResetContext();
+		}
+		else if (currentState == 12 || currentState == 19) {
+			struct CONNECT_TO_BD_STATE_13 st13;
+			switchState(st13);
+			if (currentState != 19) {
+				finishSelectQuery();
+			}
+			currentState = 13;
+			int columnsToInflate;
+			if (selectedColumnsNumber > 0) {
+				inflateLvHeader(selectedColumns, selectedColumnsNumber);
+				columnsToInflate = selectedColumnsNumber;
+			}
+			else {
+				inflateLvHeader(tableColumns, tableColumnsNumber);
+				columnsToInflate = tableColumnsNumber;
+			}
+
+			char* selectStatement = (char*)malloc(sizeof(char) * 500);
+			GetWindowText(etSelectQueryHwnd, selectStatement, 500);
+
+			int rowCount;
+			char*** selectResult = makeSelectQuery(selectStatement, &rowCount);
+			free(selectStatement);
+			if (selectResult != NULL) {
+				OUTPUT_DATA_STATE_15 st15;
+				switchState(st15);
+				currentState = 15;
+				inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
+				for (int i = 0; i < rowCount; i++) {
+					for (int j = 0; j < selectedColumnsNumber; j++) {
+						free(selectResult[i][j]);
+					}
+					free(selectResult[i]);
+				}
+				free(selectResult);
+			}
+			else {
+				FAILED_CONNECT_STATE_14 st14;
+				switchState(st14);
+				SELECT_TABLE_STATE_9 st9;
+				switchState(st9);
+				currentState = 9;
+				ResetContext();
+			}
+		}
 
       return;
     }
 
     case ID_NEXT_BTN: {
-      struct FIRST_STATE st;
-      switchState(st);
-      return;
+		if (currentState == 12) {
+			struct SELECT_ATTRIBUTE_STATE_16 st16;
+			switchState(st16);
+			currentState = 16;
+			addSectionFromAndWhere();
+
+		}
+		else if (currentState == 17) {
+			struct SELECT_COMPARISON_VALUE_STATE_18 st18;
+			addComboBoxItem();
+			switchState(st18);
+			currentState = 18;
+		}
+		else if (currentState == 18) {
+			if (addComparisonValue()) {
+				struct SELECT_LOGICAL_CONDITION_STATE_19 st19;
+				switchState(st19);
+				currentState = 19;
+			}
+		}
+		else if (currentState == 19) {
+			struct SELECT_ATTRIBUTE_STATE_16 st16;
+			addComboBoxItem();
+			switchState(st16);
+			currentState = 16;
+		}
+		return;
     }
 
     case actionTableMode: {
@@ -386,6 +611,9 @@ LRESULT CALLBACK mainWindowProc(
   switch (msg) {
     case WM_CREATE: {
       initUi(hwnd);
+	  struct SELECT_MODE_STATE_1 st;
+	  switchState(st);
+	  currentState = 1;
       return 0;
     }
 

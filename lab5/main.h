@@ -29,6 +29,8 @@ const int ID_NEXT_BTN = 8904;
 const UINT_PTR actionQueryMode = 1337;
 const UINT_PTR actionTableMode = 2608;
 
+int currentState;
+
 char buffer[2048];
 bool attrBeenSelected = false;
 
@@ -36,7 +38,7 @@ int selectedColumnsNumber = 0;
 char **selectedColumns;
 
 char **tableColumns;
-int tableColumnsNumber;
+int tableColumnsNumber = 0;
 
 HINSTANCE hInstance;
 
