@@ -142,23 +142,24 @@ LRESULT CALLBACK etTableProc(
 
 void ResetContext() {
 	attrBeenSelected = false;
-	if (selectedColumns != NULL) {
-		for (int i = 0; i < selectedColumnsNumber - 1; i++) {
-			free(selectedColumns[i]);
+	if (selectedColumnsNumber > 0) {
+		for (int i = 0; i < selectedColumnsNumber; i++) {
+			ListView_DeleteColumn(llSelectHwnd, 0);
 		}
-		free(selectedColumns);
 	}
-	
+	else {
+		for (int i = 0; i < tableColumnsNumber; i++) {
+			ListView_DeleteColumn(llSelectHwnd, 0);
+		}
+	}
 	if (tableColumns != NULL) {
 		for (int i = 0; i < tableColumnsNumber; i++) {
 			free(tableColumns[i]);
 		}
 		free(tableColumns);
 	}
-	
-	
-	int tableColumnsNumber = 0;
-	int selectedColumnsNumber = 0;
+	tableColumnsNumber = 0;
+	selectedColumnsNumber = 0;
 }
 
 HWND CreateTableAttrListView(HWND hWndParent, UINT uId) {
