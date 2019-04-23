@@ -13,9 +13,15 @@ HWND this_llComparisonSignsHwnd;
 
 HMENU this_hMenu;
 
-void (*stateMatrix)()[6][15];
+const int UI_ELEMENTS_COUNT = 10;
+const int UI_STATES_COUNT = 15;
+const int UI_INPUT_SIGNALS_COUNT = 6;
+
+void (*stateMatrix[6][15])();
 UI_STATES transitionMatrix[6][15];
 char contextMatrix[15][11];
+
+std::map<UI_ELEMENTS, HWND> elementsToHwnd;
 
 void initStateHandler(
 	HWND parent,
@@ -42,9 +48,16 @@ void initStateHandler(
 	this_llComparisonSignsHwnd = llComparisonSigns;
 	this_hMenu = hMenu;
 
+    UI_ELEMENTS i = UI_ELEMENTS::SELECT_RESULT_TABLE;
+    UI_ELEMENTS  lastElement = UI_ELEMENTS::COMPARISON_DROP_LIST;
+	for (; i <= lastElement; i++) {
+
+	}
+
 	initStateMatrix();
 	initTransitionMatrix();
-	initContextMatrix();
+	initContextMatrix()
+
 }
 
 void initStateMatrix() {
@@ -160,19 +173,23 @@ void initTransitionMatrix() {
 }
 
 void initContextMatrix() {
-    contextMatrix[UI_STATES::START_0] = "0000000000";
-    contextMatrix[UI_STATES::MODE_SELECTION_1] = "2000000000";
-    contextMatrix[UI_STATES::TABLE_SELECTION_2] = "1012110000";
-    contextMatrix[UI_STATES::TABLE_ATTRS_SELECTION_3] = "1021120000";
-    contextMatrix[UI_STATES::ERROR_MSG_4] = "1011110002";
-    contextMatrix[UI_STATES::QUERY_RESULT_OUTPUT_5] = "1111120000";
-    contextMatrix[UI_STATES::TABLE_SELECTION_6] = "1012111110";
-    contextMatrix[UI_STATES::TABLE_ATTRS_SELECTION_7] = "1021122110";
-    contextMatrix[UI_STATES::ERROR_MSG_8] = "1011111112";
-    contextMatrix[UI_STATES::QUERY_RESULT_OUTPUT_9] = "1111121110";
-    contextMatrix[UI_STATES::TABLE_ATTR_SELECTION_10] = "1021112110";
-    contextMatrix[UI_STATES::COMPARISON_SIGN_SELECTION_11] = "1011112120";
-    contextMatrix[UI_STATES::COMPARISON_VALUE_INPUT_12] = "1011112210";
-    contextMatrix[UI_STATES::LOGICAL_OPERATION_SELECTION_13] = "1011122110";
-    contextMatrix[UI_STATES::FINISH_14] = "0000000000";
+    strcpy(contextMatrix[UI_STATES::START_0], "0000000000");
+    strcpy(contextMatrix[UI_STATES::MODE_SELECTION_1], "2000000000");
+    strcpy(contextMatrix[UI_STATES::TABLE_SELECTION_2], "1012110000");
+    strcpy(contextMatrix[UI_STATES::TABLE_ATTRS_SELECTION_3], "1021120000");
+    strcpy(contextMatrix[UI_STATES::ERROR_MSG_4], "1011110002");
+    strcpy(contextMatrix[UI_STATES::QUERY_RESULT_OUTPUT_5], "1111120000");
+    strcpy(contextMatrix[UI_STATES::TABLE_SELECTION_6], "1012111110");
+    strcpy(contextMatrix[UI_STATES::TABLE_ATTRS_SELECTION_7], "1021122110");
+    strcpy(contextMatrix[UI_STATES::ERROR_MSG_8], "1011111112");
+    strcpy(contextMatrix[UI_STATES::QUERY_RESULT_OUTPUT_9], "1111121110");
+    strcpy(contextMatrix[UI_STATES::TABLE_ATTR_SELECTION_10], "1021112110");
+    strcpy(contextMatrix[UI_STATES::COMPARISON_SIGN_SELECTION_11], "1011112120");
+    strcpy(contextMatrix[UI_STATES::COMPARISON_VALUE_INPUT_12], "1011112210");
+    strcpy(contextMatrix[UI_STATES::LOGICAL_OPERATION_SELECTION_13], "1011122110");
+    strcpy(contextMatrix[UI_STATES::FINISH_14], "0000000000");
+}
+
+void switchContext(UI_STATES st) {
+    for (int i = 0; i < )
 }

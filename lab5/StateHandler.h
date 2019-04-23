@@ -6,9 +6,10 @@
 #include <stdio.h>
 #include <string>
 #include <commctrl.h>
+#include <windowsx.h>
+#include <map>
 #include <psapi.h>
 #include <unistd.h>
-#include <windowsx.h>
 #include "DbHandler.h"
 #include "enums.h"
 
@@ -35,7 +36,7 @@ void initStateHandler(
 	HMENU hMenu
 );
 
-void switchState(STATE state);
+//void switchState(UI_S state);
 void initStateMatrix();
 void initTransitionMatrix();
 void initContextMatrix();
