@@ -12,16 +12,28 @@ HWND this_etComparisonValueHwnd;
 HWND this_llComparisonSignsHwnd;
 
 HMENU this_hMenu;
+HMENU this_hSubMenu;
 
 const int UI_ELEMENTS_COUNT = 10;
 const int UI_STATES_COUNT = 15;
 const int UI_INPUT_SIGNALS_COUNT = 6;
 
-void (*stateMatrix[6][15])();
+void(*stateMatrix[6][15])();
 UI_STATES transitionMatrix[6][15];
-char contextMatrix[15][11];
+UI_CONTEXT_STATE contextMatrix[15][10];
 
 std::map<UI_ELEMENTS, HWND> elementsToHwnd;
+
+char ErrorMSG[256] = "Ошибка";
+
+char buffer[2048];
+bool attrBeenSelected = false;
+
+int selectedColumnsNumber = 0;
+char **selectedColumns;
+
+char **tableColumns;
+int tableColumnsNumber = 0;
 
 void initStateHandler(
 	HWND parent,
@@ -36,27 +48,24 @@ void initStateHandler(
     HWND llComparisonSigns,
 	HMENU hMenu
 ) {
+	
 	this_parent = parent;
-	this_etTableNameHwnd = etTableName;
-	this_llTableFieldsHwnd = llTableFields;
-	this_etSelectQueryHwnd = etSelectQuery;
-	this_llSelectHwnd = llSelect;
-	this_btnOkHwnd = btnOk;
+	elementsToHwnd[UI_ELEMENTS::TABLE_NAME_EDIT] = this_etTableNameHwnd = etTableName;
+	elementsToHwnd[UI_ELEMENTS::TABLE_ATTRS_LIST] = this_llTableFieldsHwnd = llTableFields;
+	elementsToHwnd[UI_ELEMENTS::SQL_STATEMENT_EDIT] = this_etSelectQueryHwnd = etSelectQuery;
+	elementsToHwnd[UI_ELEMENTS::SELECT_RESULT_TABLE] = this_llSelectHwnd = llSelect;
+	elementsToHwnd[UI_ELEMENTS::OK_BTN] = this_btnOkHwnd = btnOk;
 
-	this_btnNextHwnd = btnNext;
-	this_etComparisonValueHwnd = etComparisonValue;
-	this_llComparisonSignsHwnd = llComparisonSigns;
+	elementsToHwnd[UI_ELEMENTS::NEXT_BTN] = this_btnNextHwnd = btnNext;
+	elementsToHwnd[UI_ELEMENTS::COMPARISON_EDIT] = this_etComparisonValueHwnd = etComparisonValue;
+	elementsToHwnd[UI_ELEMENTS::COMPARISON_DROP_LIST] = this_llComparisonSignsHwnd = llComparisonSigns;
+	
 	this_hMenu = hMenu;
-
-    UI_ELEMENTS i = UI_ELEMENTS::SELECT_RESULT_TABLE;
-    UI_ELEMENTS  lastElement = UI_ELEMENTS::COMPARISON_DROP_LIST;
-	for (; i <= lastElement; i++) {
-
-	}
+	this_hSubMenu = GetSubMenu(hMenu, 0);
 
 	initStateMatrix();
 	initTransitionMatrix();
-	initContextMatrix()
+	initContextMatrix();
 
 }
 
@@ -173,23 +182,86 @@ void initTransitionMatrix() {
 }
 
 void initContextMatrix() {
-    strcpy(contextMatrix[UI_STATES::START_0], "0000000000");
-    strcpy(contextMatrix[UI_STATES::MODE_SELECTION_1], "2000000000");
-    strcpy(contextMatrix[UI_STATES::TABLE_SELECTION_2], "1012110000");
-    strcpy(contextMatrix[UI_STATES::TABLE_ATTRS_SELECTION_3], "1021120000");
-    strcpy(contextMatrix[UI_STATES::ERROR_MSG_4], "1011110002");
-    strcpy(contextMatrix[UI_STATES::QUERY_RESULT_OUTPUT_5], "1111120000");
-    strcpy(contextMatrix[UI_STATES::TABLE_SELECTION_6], "1012111110");
-    strcpy(contextMatrix[UI_STATES::TABLE_ATTRS_SELECTION_7], "1021122110");
-    strcpy(contextMatrix[UI_STATES::ERROR_MSG_8], "1011111112");
-    strcpy(contextMatrix[UI_STATES::QUERY_RESULT_OUTPUT_9], "1111121110");
-    strcpy(contextMatrix[UI_STATES::TABLE_ATTR_SELECTION_10], "1021112110");
-    strcpy(contextMatrix[UI_STATES::COMPARISON_SIGN_SELECTION_11], "1011112120");
-    strcpy(contextMatrix[UI_STATES::COMPARISON_VALUE_INPUT_12], "1011112210");
-    strcpy(contextMatrix[UI_STATES::LOGICAL_OPERATION_SELECTION_13], "1011122110");
-    strcpy(contextMatrix[UI_STATES::FINISH_14], "0000000000");
-}
+	std::string tempMatrix[] = {
+		"0000000000",
+		"2000000000",
+		"0012110000",
+		"0021120000",
+		"0011110002",
+		"0211120000",
+		"0012111110",
+		"0021122110",
+		"0011111112",
+		"0211121110",
+		"0021112110",
+		"0011112120",
+		"0011112210",
+		"0011122110",
+		"0000000000"
+	};
 
+	for (int i = 0; i < UI_STATES_COUNT; i++) {
+		for (int j = 0; j < UI_ELEMENTS_COUNT; j++) {
+			contextMatrix[i][j] = (UI_CONTEXT_STATE)(tempMatrix[i][j] - '0');
+		}
+	}
+
+}
 void switchContext(UI_STATES st) {
-    for (int i = 0; i < )
+	switch (contextMatrix[st][UI_ELEMENTS::MENU])
+	{
+
+	case UI_CONTEXT_STATE::INVISIBLE: {
+		RemoveMenu(this_hMenu,(UINT_PTR) this_hSubMenu, MF_BYCOMMAND);
+		break;
+	}
+
+	case UI_CONTEXT_STATE::DISABLED: {
+		RemoveMenu(this_hMenu, (UINT_PTR)this_hSubMenu, MF_BYCOMMAND);
+		InsertMenu(this_hMenu, 0, MF_STRING | MF_POPUP | MF_BYPOSITION, (UINT_PTR)this_hSubMenu, TEXT("Mode"));
+		EnableMenuItem(this_hMenu, (UINT_PTR)this_hSubMenu, MF_GRAYED | MF_BYCOMMAND);
+		break;
+	}
+
+	case UI_CONTEXT_STATE::ENABLED: {
+		RemoveMenu(this_hMenu, (UINT_PTR)this_hSubMenu, MF_BYCOMMAND);
+		InsertMenu(this_hMenu, 0, MF_STRING | MF_POPUP | MF_BYPOSITION, (UINT_PTR)this_hSubMenu, TEXT("Mode"));
+		EnableMenuItem(this_hMenu, (UINT_PTR)this_hSubMenu, MF_ENABLED | MF_BYCOMMAND);
+		break;
+	}
+
+	default:
+		break;
+	}
+	DrawMenuBar(this_parent);
+
+	for (int i = 1; i < UI_ELEMENTS_COUNT - 1; i++) {
+		switch (contextMatrix[st][i])
+		{
+		case UI_CONTEXT_STATE::INVISIBLE: {
+			ShowWindow(elementsToHwnd[(UI_ELEMENTS)i], SW_HIDE);
+			break;
+		}
+										  
+		case UI_CONTEXT_STATE::DISABLED: {
+			ShowWindow(elementsToHwnd[(UI_ELEMENTS)i], SW_SHOW);
+			EnableWindow(elementsToHwnd[(UI_ELEMENTS)i], false);
+			break;
+		}
+
+		case UI_CONTEXT_STATE::ENABLED: {
+			ShowWindow(elementsToHwnd[(UI_ELEMENTS)i], SW_SHOW);
+			EnableWindow(elementsToHwnd[(UI_ELEMENTS)i], true);
+			break;
+		}
+		default:
+			break;
+		}
+	}
+
+	if (contextMatrix[st][UI_ELEMENTS::ERROR_MESSAGE] == UI_CONTEXT_STATE::ENABLED) {
+		if (MessageBox(this_parent, ErrorMSG, 0, MB_ICONERROR | MB_OK) == IDOK) {
+			// TO DO implements -> switchState(UI_INPUT::OK_BTN)
+		}
+	}
 }
