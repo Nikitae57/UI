@@ -155,11 +155,18 @@ void ResetContext() {
 	if (tableColumns != NULL) {
 		for (int i = 0; i < tableColumnsNumber; i++) {
 			free(tableColumns[i]);
-		}
-		free(tableColumns);
-	}
-	tableColumnsNumber = 0;
-	selectedColumnsNumber = 0;
+        }
+      free(tableColumns);
+    }
+//  for (int i = 0; i < rowCount; i++) {
+//    for (int j = 0; j < columnsToInflate; j++) {
+//      free(selectResultMain[i][j]);
+//    }
+//    free(selectResultMain[i]);
+//  }
+//  free(selectResultMain);
+  tableColumnsNumber = 0;
+  selectedColumnsNumber = 0;
 }
 
 HWND CreateTableAttrListView(HWND hWndParent, UINT uId) {
@@ -471,7 +478,6 @@ void handleWmCommand(
 			switchState(st);
 			currentState = 6;
 			finishSelectQuery();
-			int columnsToInflate;
 			if (selectedColumnsNumber > 0) {
 				inflateLvHeader(selectedColumns, selectedColumnsNumber);
 				columnsToInflate = selectedColumnsNumber;
@@ -485,20 +491,20 @@ void handleWmCommand(
 			GetWindowText(etSelectQueryHwnd, selectStatement, 500);
 
 			int rowCount;
-			char*** selectResult = makeSelectQuery(selectStatement, &rowCount);
+			selectResultMain = makeSelectQuery(selectStatement, &rowCount);
 			free(selectStatement);
-			if (selectResult != NULL) {
+			if (selectResultMain != NULL) {
 				OUTPUT_DATA_STATE_8 st8;
 				switchState(st8);
 				currentState = 8;
-				inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
-				for (int i = 0; i < rowCount; i++) {
-					for (int j = 0; j < selectedColumnsNumber; j++) {
-						free(selectResult[i][j]);
-					}
-					free(selectResult[i]);
-				}
-				free(selectResult);
+				inflateSelectLvBody(selectResultMain, rowCount, columnsToInflate);
+//				for (int i = 0; i < rowCount; i++) {
+//					for (int j = 0; j < columnsToInflate; j++) {
+//						free(selectResult[i][j]);
+//					}
+//					free(selectResult[i]);
+//				}
+//				free(selectResult);
 			}
 			else {
 				FAILED_CONNECT_STATE_7 st7;
@@ -522,7 +528,6 @@ void handleWmCommand(
 				finishSelectQuery();
 			}
 			currentState = 13;
-			int columnsToInflate;
 			if (selectedColumnsNumber > 0) {
 				inflateLvHeader(selectedColumns, selectedColumnsNumber);
 				columnsToInflate = selectedColumnsNumber;
@@ -535,21 +540,20 @@ void handleWmCommand(
 			char* selectStatement = (char*)malloc(sizeof(char) * 500);
 			GetWindowText(etSelectQueryHwnd, selectStatement, 500);
 
-			int rowCount;
-			char*** selectResult = makeSelectQuery(selectStatement, &rowCount);
+			selectResultMain = makeSelectQuery(selectStatement, &rowCount);
 			free(selectStatement);
-			if (selectResult != NULL) {
+			if (selectResultMain != NULL) {
 				OUTPUT_DATA_STATE_15 st15;
 				switchState(st15);
 				currentState = 15;
-				inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
-				for (int i = 0; i < rowCount; i++) {
-					for (int j = 0; j < selectedColumnsNumber; j++) {
-						free(selectResult[i][j]);
-					}
-					free(selectResult[i]);
-				}
-				free(selectResult);
+				inflateSelectLvBody(selectResultMain, rowCount, columnsToInflate);
+//				for (int i = 0; i < rowCount; i++) {
+//					for (int j = 0; j < selectedColumnsNumber; j++) {
+//						free(selectResult[i][j]);
+//					}
+//					free(selectResult[i]);
+//				}
+//				free(selectResult);
 			}
 			else {
 				FAILED_CONNECT_STATE_14 st14;

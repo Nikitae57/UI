@@ -95,9 +95,9 @@ char ***makeSelectQuery(
 	  return NULL;
   }
 
-  char*** result = (char***) malloc(sizeof(char**) * (currentRow + 1));
+  char*** result = (char***) malloc(sizeof(char**) * (currentRow));
   for (int i = 0; i < currentRow; i++) {
-    result[i] = (char**) malloc(sizeof(char*) * (colNumber + 1));
+    result[i] = (char**) malloc(sizeof(char*) * (colNumber));
     for (int j = 0; j < colNumber; j++) {
       result[i][j] = (char*)
           malloc(sizeof(char) * strlen(selectResult[i][j]) + 1);
@@ -147,7 +147,7 @@ char** getTableColumns(const char* tableName, int* columnNumber) {
     printf("%s\n", columnNames[i]);
   }
 
-  char** result = (char**) (malloc(sizeof(char*) * (currentCol + 1)));
+  char** result = (char**) (malloc(sizeof(char*) * (currentCol)));
   for (int i = 0; i < currentCol; i++) {
     result[i] = (char*) malloc(sizeof(char) * strlen(columnNames[i]) + 1);
     strcpy(result[i], columnNames[i]);

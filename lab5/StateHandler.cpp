@@ -43,52 +43,12 @@ void initStateHandler(
 }
 
 void switchState(STATE state) {
-  if (state.tableNameVisible) {
-    ShowWindow(this_etTableNameHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_etTableNameHwnd, SW_HIDE);
+  for (int i = 0; i < state.visibleCount; i++) {
+    ShowWindow(state.visibles[i], SW_SHOW);
   }
 
-  if (state.tableAttrsVisible) {
-    ShowWindow(this_llTableFieldsHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_llTableFieldsHwnd, SW_HIDE);
-  }
-
-  if (state.okBtnVisible) {
-    ShowWindow(this_btnOkHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_btnOkHwnd, SW_HIDE);
-  }
-
-  if (state.selectResultVisible) {
-    ShowWindow(this_llSelectHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_llSelectHwnd, SW_HIDE);
-  }
-
-  if (state.sqlStatementVisible) {
-    ShowWindow(this_etSelectQueryHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_etSelectQueryHwnd, SW_HIDE);
-  }
-
-  if (state.comparisonValueVisible) {
-    ShowWindow(this_etComparisonValueHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_etComparisonValueHwnd, SW_HIDE);
-  }
-
-  if (state.comparisonSignsVisible) {
-    ShowWindow(this_llComparisonSignsHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_llComparisonSignsHwnd, SW_HIDE);
-  }
-
-  if (state.nextBtnVisible) {
-    ShowWindow(this_btnNextHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_btnNextHwnd, SW_HIDE);
+  for (int i = 0; i < state.invisibleCount; i++) {
+    ShowWindow(state.invisibles[i], SW_HIDE);
   }
 
   if (state.funPtr != NULL) {
@@ -97,15 +57,17 @@ void switchState(STATE state) {
 }
 
 SELECT_MODE_STATE_1::SELECT_MODE_STATE_1() : STATE() {
-	tableNameVisible = false;
-	tableAttrsVisible = false;
-	okBtnVisible = false;
-	selectResultVisible = false;
-	sqlStatementVisible = false;
+    invisibles[0] = this_etTableNameHwnd;
+    invisibles[1] = this_llTableFieldsHwnd;
+    invisibles[2] = this_etSelectQueryHwnd;
+    invisibles[3] = this_llSelectHwnd;
+    invisibles[4] = this_btnOkHwnd;
+    invisibles[5] = this_btnNextHwnd;
+    invisibles[6] = this_etComparisonValueHwnd;
+    invisibles[7] = this_llComparisonSignsHwnd;
 
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
+    invisibleCount = 8;
+    visibleCount = 0;
 
 	funPtr = []() {
 		EnableMenuItem(this_hMenu, 0, MF_ENABLED | MF_BYPOSITION);
@@ -114,15 +76,18 @@ SELECT_MODE_STATE_1::SELECT_MODE_STATE_1() : STATE() {
 }
 
 SELECT_TABLE_STATE_2::SELECT_TABLE_STATE_2() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
+    invisibles[1] = this_etComparisonValueHwnd;
+    invisibles[2] = this_llComparisonSignsHwnd;
+    invisibles[3] = this_btnNextHwnd;
 
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
+    visibles[0] = this_btnOkHwnd;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+
+    invisibleCount = 4;
+    visibleCount = 4;
 
 	funPtr = []() {
 		EnableMenuItem(this_hMenu, 0, MF_GRAYED | MF_BYPOSITION);
@@ -139,29 +104,35 @@ SELECT_TABLE_STATE_2::SELECT_TABLE_STATE_2() : STATE() {
 }
 
 CONNECT_TO_BD_STATE_3::CONNECT_TO_BD_STATE_3() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
+    invisibles[1] = this_etComparisonValueHwnd;
+    invisibles[2] = this_llComparisonSignsHwnd;
+    invisibles[3] = this_btnNextHwnd;
 
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
+    visibles[0] = this_btnOkHwnd;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+
+    invisibleCount = 4;
+    visibleCount = 4;
 
 	funPtr = []() {};
 }
 
 FAILED_CONNECT_STATE_4::FAILED_CONNECT_STATE_4() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
+    invisibles[1] = this_etComparisonValueHwnd;
+    invisibles[2] = this_llComparisonSignsHwnd;
+    invisibles[3] = this_btnNextHwnd;
 
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
+    visibles[0] = this_btnOkHwnd;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+
+    invisibleCount = 4;
+    visibleCount = 4;
 
 	funPtr = []() {
 		MessageBox(this_parent, "Таблица не найдена", NULL, MB_ICONERROR | MB_OK);
@@ -169,15 +140,18 @@ FAILED_CONNECT_STATE_4::FAILED_CONNECT_STATE_4() : STATE() {
 }
 
 SELECT_ATTRIBUTES_5::SELECT_ATTRIBUTES_5() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
+    invisibles[1] = this_etComparisonValueHwnd;
+    invisibles[2] = this_llComparisonSignsHwnd;
+    invisibles[3] = this_btnNextHwnd;
 
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
+    visibles[0] = this_btnOkHwnd;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+
+    invisibleCount = 4;
+    visibleCount = 4;
 
 	funPtr = []() {
 		Button_Enable(this_btnOkHwnd, true);
@@ -186,29 +160,35 @@ SELECT_ATTRIBUTES_5::SELECT_ATTRIBUTES_5() : STATE() {
 }
 
 CONNECT_TO_BD_STATE_6::CONNECT_TO_BD_STATE_6() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
+    invisibles[1] = this_etComparisonValueHwnd;
+    invisibles[2] = this_llComparisonSignsHwnd;
+    invisibles[3] = this_btnNextHwnd;
 
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
+    visibles[0] = this_btnOkHwnd;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+
+    invisibleCount = 4;
+    visibleCount = 4;
 
 	funPtr = []() {};
 }
 
 FAILED_CONNECT_STATE_7::FAILED_CONNECT_STATE_7() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
+    invisibles[1] = this_etComparisonValueHwnd;
+    invisibles[2] = this_llComparisonSignsHwnd;
+    invisibles[3] = this_btnNextHwnd;
 
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
+    visibles[0] = this_btnOkHwnd;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+
+    invisibleCount = 4;
+    visibleCount = 4;
 
 	funPtr = []() {
 		MessageBox(this_parent, "Ошибка при выполнении запроса", NULL, MB_ICONERROR | MB_OK);
@@ -216,29 +196,35 @@ FAILED_CONNECT_STATE_7::FAILED_CONNECT_STATE_7() : STATE() {
 }
 
 OUTPUT_DATA_STATE_8::OUTPUT_DATA_STATE_8() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = true;
-	sqlStatementVisible = true;
+    invisibles[0] = this_btnNextHwnd;
+    invisibles[1] = this_etComparisonValueHwnd;
+    invisibles[2] = this_llComparisonSignsHwnd;
 
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
+    visibles[0] = this_btnOkHwnd;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+    visibles[4] = this_llSelectHwnd;
+
+    invisibleCount = 3;
+    visibleCount = 5;
 
 	funPtr = []() {};
 }
 
 SELECT_TABLE_STATE_9::SELECT_TABLE_STATE_9() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
 
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[0] = this_btnOkHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+    visibles[4] = this_btnNextHwnd;
+    visibles[5] = this_llComparisonSignsHwnd;
+    visibles[6] = this_etComparisonValueHwnd;
+
+    invisibleCount = 1;
+    visibleCount = 7;
 
 	funPtr = []() {
 		EnableMenuItem(this_hMenu, 0, MF_GRAYED | MF_BYPOSITION);
@@ -258,29 +244,35 @@ SELECT_TABLE_STATE_9::SELECT_TABLE_STATE_9() : STATE() {
 }
 
 CONNECT_TO_BD_STATE_10::CONNECT_TO_BD_STATE_10() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
 
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[0] = this_btnOkHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+    visibles[4] = this_btnNextHwnd;
+    visibles[5] = this_llComparisonSignsHwnd;
+    visibles[6] = this_etComparisonValueHwnd;
+
+    invisibleCount = 1;
+    visibleCount = 7;
 
 	funPtr = []() {};
 }
 
 FAILED_CONNECT_STATE_11::FAILED_CONNECT_STATE_11() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
 
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[0] = this_btnOkHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+    visibles[4] = this_btnNextHwnd;
+    visibles[5] = this_llComparisonSignsHwnd;
+    visibles[6] = this_etComparisonValueHwnd;
+
+    invisibleCount = 1;
+    visibleCount = 7;
 
 	funPtr = []() {
 		MessageBox(this_parent, "Таблица не найдена", NULL, MB_ICONERROR | MB_OK);
@@ -288,15 +280,18 @@ FAILED_CONNECT_STATE_11::FAILED_CONNECT_STATE_11() : STATE() {
 }
 
 SELECT_ATTRIBUTES_12::SELECT_ATTRIBUTES_12() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
 
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[0] = this_btnOkHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+    visibles[4] = this_btnNextHwnd;
+    visibles[5] = this_llComparisonSignsHwnd;
+    visibles[6] = this_etComparisonValueHwnd;
+
+    invisibleCount = 1;
+    visibleCount = 7;
 
 	funPtr = []() {
 		Button_Enable(this_btnOkHwnd, true);
@@ -307,15 +302,18 @@ SELECT_ATTRIBUTES_12::SELECT_ATTRIBUTES_12() : STATE() {
 }
 
 CONNECT_TO_BD_STATE_13::CONNECT_TO_BD_STATE_13() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
 
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[0] = this_btnOkHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+    visibles[4] = this_btnNextHwnd;
+    visibles[5] = this_llComparisonSignsHwnd;
+    visibles[6] = this_etComparisonValueHwnd;
+
+    invisibleCount = 1;
+    visibleCount = 7;
 
 	funPtr = []() {
 		Button_Enable(this_btnNextHwnd, true);
@@ -327,15 +325,18 @@ CONNECT_TO_BD_STATE_13::CONNECT_TO_BD_STATE_13() : STATE() {
 }
 
 FAILED_CONNECT_STATE_14::FAILED_CONNECT_STATE_14() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
 
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[0] = this_btnOkHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+    visibles[4] = this_btnNextHwnd;
+    visibles[5] = this_llComparisonSignsHwnd;
+    visibles[6] = this_etComparisonValueHwnd;
+
+    invisibleCount = 1;
+    visibleCount = 7;
 
 	funPtr = []() {
 		MessageBox(this_parent, "Ошибка при выполнении запроса", NULL, MB_ICONERROR | MB_OK);
@@ -343,15 +344,17 @@ FAILED_CONNECT_STATE_14::FAILED_CONNECT_STATE_14() : STATE() {
 }
 
 OUTPUT_DATA_STATE_15::OUTPUT_DATA_STATE_15() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = true;
-	sqlStatementVisible = true;
+    visibles[0] = this_etTableNameHwnd;
+    visibles[1] = this_llTableFieldsHwnd;
+    visibles[2] = this_etSelectQueryHwnd;
+    visibles[3] = this_llSelectHwnd;
+    visibles[4] = this_btnOkHwnd;
+    visibles[5] = this_btnNextHwnd;
+    visibles[6] = this_etComparisonValueHwnd;
+    visibles[7] = this_llComparisonSignsHwnd;
 
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
+    invisibleCount = 0;
+    visibleCount = 8;
 
 	funPtr = []() {
 		Button_Enable(this_btnNextHwnd, false);
@@ -359,15 +362,18 @@ OUTPUT_DATA_STATE_15::OUTPUT_DATA_STATE_15() : STATE() {
 }
 
 SELECT_ATTRIBUTE_STATE_16::SELECT_ATTRIBUTE_STATE_16() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
 
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[0] = this_btnOkHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+    visibles[4] = this_btnNextHwnd;
+    visibles[5] = this_llComparisonSignsHwnd;
+    visibles[6] = this_etComparisonValueHwnd;
+
+    invisibleCount = 1;
+    visibleCount = 7;
 
 	funPtr = []() {
 		ListBox_Enable(this_llTableFieldsHwnd, true);
@@ -378,15 +384,18 @@ SELECT_ATTRIBUTE_STATE_16::SELECT_ATTRIBUTE_STATE_16() : STATE() {
 }
 
 SELECT_COMPARISON_SIGN_STATE_17::SELECT_COMPARISON_SIGN_STATE_17() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
 
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[0] = this_btnOkHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+    visibles[4] = this_btnNextHwnd;
+    visibles[5] = this_llComparisonSignsHwnd;
+    visibles[6] = this_etComparisonValueHwnd;
+
+    invisibleCount = 1;
+    visibleCount = 7;
 
 	funPtr = []() {
 		ListBox_Enable(this_llTableFieldsHwnd, false);
@@ -404,15 +413,18 @@ SELECT_COMPARISON_SIGN_STATE_17::SELECT_COMPARISON_SIGN_STATE_17() : STATE() {
 }
 
 SELECT_COMPARISON_VALUE_STATE_18::SELECT_COMPARISON_VALUE_STATE_18() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
 
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[0] = this_btnOkHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+    visibles[4] = this_btnNextHwnd;
+    visibles[5] = this_llComparisonSignsHwnd;
+    visibles[6] = this_etComparisonValueHwnd;
+
+    invisibleCount = 1;
+    visibleCount = 7;
 
 	funPtr = []() {
 		ComboBox_Enable(this_llComparisonSignsHwnd, false);
@@ -423,15 +435,18 @@ SELECT_COMPARISON_VALUE_STATE_18::SELECT_COMPARISON_VALUE_STATE_18() : STATE() {
 }
 
 SELECT_LOGICAL_CONDITION_STATE_19::SELECT_LOGICAL_CONDITION_STATE_19() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
+    invisibles[0] = this_llSelectHwnd;
 
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
+    visibles[1] = this_etTableNameHwnd;
+    visibles[0] = this_btnOkHwnd;
+    visibles[2] = this_llTableFieldsHwnd;
+    visibles[3] = this_etSelectQueryHwnd;
+    visibles[4] = this_btnNextHwnd;
+    visibles[5] = this_llComparisonSignsHwnd;
+    visibles[6] = this_etComparisonValueHwnd;
+
+    invisibleCount = 1;
+    visibleCount = 7;
 
 	funPtr = []() {
 		ComboBox_Enable(this_llComparisonSignsHwnd, true);

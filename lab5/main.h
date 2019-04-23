@@ -34,6 +34,9 @@ int currentState;
 char buffer[2048];
 bool attrBeenSelected = false;
 
+char*** selectResultMain;
+int rowCount;
+int columnsToInflate;
 int selectedColumnsNumber = 0;
 char **selectedColumns;
 
