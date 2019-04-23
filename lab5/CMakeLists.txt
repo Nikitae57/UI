@@ -9,10 +9,17 @@ set(CMAKE_CXX_FLAGS
     -Wno-int-to-pointer-cast
 )
 
-include_directories("D:\\projects\\ui\\lab5\\db")
+file(GLOB lab5_src
+    "*.h"
+    "*.cpp"
+)
+
+include_directories("
+  D:\\projects\\ui\\lab5\\db
+")
 link_directories("D:\\projects\\ui\\lab5\\db")
 
-add_executable(lab5 main.cpp DbHandler.cpp DbHandler.h StateHandler.cpp main.h StateHandler.h)
+add_executable(lab5 ${lab5_src})
 target_link_libraries(lab5
     sqlite3.dll
     comctl32

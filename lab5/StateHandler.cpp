@@ -1,7 +1,4 @@
 #include "StateHandler.h"
-#include "windows.h"
-#include <windowsx.h>
-#include <commctrl.h>
 
 HWND this_parent;
 HWND this_etTableNameHwnd;
@@ -15,6 +12,16 @@ HWND this_etComparisonValueHwnd;
 HWND this_llComparisonSignsHwnd;
 
 HMENU this_hMenu;
+
+const int UI_ELEMENTS_COUNT = 10;
+const int UI_STATES_COUNT = 15;
+const int UI_INPUT_SIGNALS_COUNT = 6;
+
+void (*stateMatrix[6][15])();
+UI_STATES transitionMatrix[6][15];
+char contextMatrix[15][11];
+
+std::map<UI_ELEMENTS, HWND> elementsToHwnd;
 
 void initStateHandler(
 	HWND parent,
@@ -40,416 +47,149 @@ void initStateHandler(
 	this_etComparisonValueHwnd = etComparisonValue;
 	this_llComparisonSignsHwnd = llComparisonSigns;
 	this_hMenu = hMenu;
+
+    UI_ELEMENTS i = UI_ELEMENTS::SELECT_RESULT_TABLE;
+    UI_ELEMENTS  lastElement = UI_ELEMENTS::COMPARISON_DROP_LIST;
+	for (; i <= lastElement; i++) {
+
+	}
+
+	initStateMatrix();
+	initTransitionMatrix();
+	initContextMatrix()
+
 }
 
-void switchState(STATE state) {
-  if (state.tableNameVisible) {
-    ShowWindow(this_etTableNameHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_etTableNameHwnd, SW_HIDE);
-  }
+void initStateMatrix() {
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_MENU_TABLE][UI_STATES::MODE_SELECTION_1] = []() {
 
-  if (state.tableAttrsVisible) {
-    ShowWindow(this_llTableFieldsHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_llTableFieldsHwnd, SW_HIDE);
-  }
+    };
 
-  if (state.okBtnVisible) {
-    ShowWindow(this_btnOkHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_btnOkHwnd, SW_HIDE);
-  }
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_MENU_QUERY][UI_STATES::MODE_SELECTION_1] = []() {
 
-  if (state.selectResultVisible) {
-    ShowWindow(this_llSelectHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_llSelectHwnd, SW_HIDE);
-  }
+    };
 
-  if (state.sqlStatementVisible) {
-    ShowWindow(this_etSelectQueryHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_etSelectQueryHwnd, SW_HIDE);
-  }
+    stateMatrix[UI_INPUT_SIGNALS::ENTER_KEY_PRESSED][UI_STATES::TABLE_SELECTION_2] = []() {
 
-  if (state.comparisonValueVisible) {
-    ShowWindow(this_etComparisonValueHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_etComparisonValueHwnd, SW_HIDE);
-  }
+    };
 
-  if (state.comparisonSignsVisible) {
-    ShowWindow(this_llComparisonSignsHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_llComparisonSignsHwnd, SW_HIDE);
-  }
+    stateMatrix[UI_INPUT_SIGNALS::DOUBLE_CLICK_ATTR][UI_STATES::TABLE_ATTRS_SELECTION_3] = []() {
 
-  if (state.nextBtnVisible) {
-    ShowWindow(this_btnNextHwnd, SW_SHOW);
-  } else {
-    ShowWindow(this_btnNextHwnd, SW_HIDE);
-  }
+    };
 
-  if (state.funPtr != NULL) {
-	  state.funPtr();
-  }
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::TABLE_ATTRS_SELECTION_3] = []() {
+
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::ERROR_MSG_4] = []() {
+
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::QUERY_RESULT_OUTPUT_5] = []() {
+
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::ENTER_KEY_PRESSED][UI_STATES::TABLE_SELECTION_6] = []() {
+
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::DOUBLE_CLICK_ATTR][UI_STATES::TABLE_ATTRS_SELECTION_7] = []() {
+
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::TABLE_ATTRS_SELECTION_7] = []() {
+
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_NEXT_BTN][UI_STATES::TABLE_ATTRS_SELECTION_7] = []() {
+
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::ERROR_MSG_8] = []() {
+
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::QUERY_RESULT_OUTPUT_9] = []() {
+
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::DOUBLE_CLICK_ATTR][UI_STATES::TABLE_ATTR_SELECTION_10] = []() {
+
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_NEXT_BTN][UI_STATES::COMPARISON_SIGN_SELECTION_11] = []() {
+
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_NEXT_BTN][UI_STATES::COMPARISON_VALUE_INPUT_12] = []() {
+
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::LOGICAL_OPERATION_SELECTION_13] = []() {
+
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_NEXT_BTN][UI_STATES::LOGICAL_OPERATION_SELECTION_13] = []() {
+
+    };
 }
 
-SELECT_MODE_STATE_1::SELECT_MODE_STATE_1() : STATE() {
-	tableNameVisible = false;
-	tableAttrsVisible = false;
-	okBtnVisible = false;
-	selectResultVisible = false;
-	sqlStatementVisible = false;
+void initTransitionMatrix() {
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_MENU_TABLE][UI_STATES::MODE_SELECTION_1] = UI_STATES::TABLE_SELECTION_2;
 
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_MENU_QUERY][UI_STATES::MODE_SELECTION_1] = UI_STATES::TABLE_SELECTION_6;
 
-	funPtr = []() {
-		EnableMenuItem(this_hMenu, 0, MF_ENABLED | MF_BYPOSITION);
-		DrawMenuBar(this_parent);
-	};
+    transitionMatrix[UI_INPUT_SIGNALS::ENTER_KEY_PRESSED][UI_STATES::TABLE_SELECTION_2] = UI_STATES::TABLE_ATTRS_SELECTION_3;
+
+    transitionMatrix[UI_INPUT_SIGNALS::DOUBLE_CLICK_ATTR][UI_STATES::TABLE_ATTRS_SELECTION_3] = UI_STATES::TABLE_ATTRS_SELECTION_3;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::TABLE_ATTRS_SELECTION_3] = UI_STATES::QUERY_RESULT_OUTPUT_5;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::ERROR_MSG_4] = UI_STATES::TABLE_SELECTION_2;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::QUERY_RESULT_OUTPUT_5] = UI_STATES::MODE_SELECTION_1;
+
+    transitionMatrix[UI_INPUT_SIGNALS::ENTER_KEY_PRESSED][UI_STATES::TABLE_SELECTION_6] = UI_STATES::TABLE_ATTRS_SELECTION_7;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::TABLE_ATTRS_SELECTION_7] = UI_STATES::QUERY_RESULT_OUTPUT_9;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_NEXT_BTN][UI_STATES::TABLE_ATTRS_SELECTION_7] = UI_STATES::TABLE_ATTR_SELECTION_10;
+
+    transitionMatrix[UI_INPUT_SIGNALS::DOUBLE_CLICK_ATTR][UI_STATES::TABLE_ATTRS_SELECTION_7] = UI_STATES::TABLE_ATTRS_SELECTION_7;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::ERROR_MSG_8] = UI_STATES::TABLE_SELECTION_6;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::QUERY_RESULT_OUTPUT_9] = UI_STATES::MODE_SELECTION_1;
+
+    transitionMatrix[UI_INPUT_SIGNALS::DOUBLE_CLICK_ATTR][UI_STATES::TABLE_ATTR_SELECTION_10] = UI_STATES::COMPARISON_SIGN_SELECTION_11;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_NEXT_BTN][UI_STATES::COMPARISON_SIGN_SELECTION_11] = UI_STATES::COMPARISON_VALUE_INPUT_12;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_NEXT_BTN][UI_STATES::COMPARISON_VALUE_INPUT_12] = UI_STATES::LOGICAL_OPERATION_SELECTION_13;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_NEXT_BTN][UI_STATES::LOGICAL_OPERATION_SELECTION_13] = UI_STATES::TABLE_ATTR_SELECTION_10;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::LOGICAL_OPERATION_SELECTION_13] = UI_STATES::QUERY_RESULT_OUTPUT_9;
 }
 
-SELECT_TABLE_STATE_2::SELECT_TABLE_STATE_2() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
-
-	funPtr = []() {
-		EnableMenuItem(this_hMenu, 0, MF_GRAYED | MF_BYPOSITION);
-		DrawMenuBar(this_parent);
-		Edit_SetText(this_etTableNameHwnd, "");
-		Edit_SetText(this_etSelectQueryHwnd, "");
-		Edit_SetText(this_etComparisonValueHwnd, "");
-		Button_Enable(this_btnOkHwnd, false);
-		Edit_Enable(this_etTableNameHwnd, true);
-		ListBox_Enable(this_llTableFieldsHwnd, true);
-		ListBox_ResetContent(this_llTableFieldsHwnd);
-		ListView_DeleteAllItems(this_llSelectHwnd);
-	};
+void initContextMatrix() {
+    strcpy(contextMatrix[UI_STATES::START_0], "0000000000");
+    strcpy(contextMatrix[UI_STATES::MODE_SELECTION_1], "2000000000");
+    strcpy(contextMatrix[UI_STATES::TABLE_SELECTION_2], "1012110000");
+    strcpy(contextMatrix[UI_STATES::TABLE_ATTRS_SELECTION_3], "1021120000");
+    strcpy(contextMatrix[UI_STATES::ERROR_MSG_4], "1011110002");
+    strcpy(contextMatrix[UI_STATES::QUERY_RESULT_OUTPUT_5], "1111120000");
+    strcpy(contextMatrix[UI_STATES::TABLE_SELECTION_6], "1012111110");
+    strcpy(contextMatrix[UI_STATES::TABLE_ATTRS_SELECTION_7], "1021122110");
+    strcpy(contextMatrix[UI_STATES::ERROR_MSG_8], "1011111112");
+    strcpy(contextMatrix[UI_STATES::QUERY_RESULT_OUTPUT_9], "1111121110");
+    strcpy(contextMatrix[UI_STATES::TABLE_ATTR_SELECTION_10], "1021112110");
+    strcpy(contextMatrix[UI_STATES::COMPARISON_SIGN_SELECTION_11], "1011112120");
+    strcpy(contextMatrix[UI_STATES::COMPARISON_VALUE_INPUT_12], "1011112210");
+    strcpy(contextMatrix[UI_STATES::LOGICAL_OPERATION_SELECTION_13], "1011122110");
+    strcpy(contextMatrix[UI_STATES::FINISH_14], "0000000000");
 }
 
-CONNECT_TO_BD_STATE_3::CONNECT_TO_BD_STATE_3() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
-
-	funPtr = []() {};
+void switchContext(UI_STATES st) {
+    for (int i = 0; i < )
 }
-
-FAILED_CONNECT_STATE_4::FAILED_CONNECT_STATE_4() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
-
-	funPtr = []() {
-		MessageBox(this_parent, "Таблица не найдена", NULL, MB_ICONERROR | MB_OK);
-	};
-}
-
-SELECT_ATTRIBUTES_5::SELECT_ATTRIBUTES_5() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
-
-	funPtr = []() {
-		Button_Enable(this_btnOkHwnd, true);
-		Edit_Enable(this_etTableNameHwnd, false);
-	};
-}
-
-CONNECT_TO_BD_STATE_6::CONNECT_TO_BD_STATE_6() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
-
-	funPtr = []() {};
-}
-
-FAILED_CONNECT_STATE_7::FAILED_CONNECT_STATE_7() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
-
-	funPtr = []() {
-		MessageBox(this_parent, "Ошибка при выполнении запроса", NULL, MB_ICONERROR | MB_OK);
-	};
-}
-
-OUTPUT_DATA_STATE_8::OUTPUT_DATA_STATE_8() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = true;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
-
-	funPtr = []() {};
-}
-
-SELECT_TABLE_STATE_9::SELECT_TABLE_STATE_9() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
-
-	funPtr = []() {
-		EnableMenuItem(this_hMenu, 0, MF_GRAYED | MF_BYPOSITION);
-		DrawMenuBar(this_parent);
-		Edit_SetText(this_etTableNameHwnd, "");
-		Edit_SetText(this_etSelectQueryHwnd, "");
-		Edit_SetText(this_etComparisonValueHwnd, "");
-		Button_Enable(this_btnOkHwnd, false); 
-		Button_Enable(this_btnNextHwnd, false);
-		Edit_Enable(this_etTableNameHwnd, true);
-		Edit_Enable(this_etComparisonValueHwnd, false);
-		ComboBox_Enable(this_llComparisonSignsHwnd, false);
-		ListBox_Enable(this_llTableFieldsHwnd, true);
-		ListBox_ResetContent(this_llTableFieldsHwnd);
-		ListView_DeleteAllItems(this_llSelectHwnd);
-	};
-}
-
-CONNECT_TO_BD_STATE_10::CONNECT_TO_BD_STATE_10() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
-
-	funPtr = []() {};
-}
-
-FAILED_CONNECT_STATE_11::FAILED_CONNECT_STATE_11() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
-
-	funPtr = []() {
-		MessageBox(this_parent, "Таблица не найдена", NULL, MB_ICONERROR | MB_OK);
-	};
-}
-
-SELECT_ATTRIBUTES_12::SELECT_ATTRIBUTES_12() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
-
-	funPtr = []() {
-		Button_Enable(this_btnOkHwnd, true);
-		Button_Enable(this_btnNextHwnd, true);
-		Edit_Enable(this_etTableNameHwnd, false);
-		ListBox_Enable(this_llTableFieldsHwnd, true);
-	};
-}
-
-CONNECT_TO_BD_STATE_13::CONNECT_TO_BD_STATE_13() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
-
-	funPtr = []() {
-		Button_Enable(this_btnNextHwnd, true);
-		Edit_Enable(this_etComparisonValueHwnd, false);
-		ListBox_Enable(this_llTableFieldsHwnd, false);
-		ComboBox_Enable(this_llComparisonSignsHwnd, false);
-		ComboBox_ResetContent(this_llComparisonSignsHwnd);
-	};
-}
-
-FAILED_CONNECT_STATE_14::FAILED_CONNECT_STATE_14() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = false;
-	comparisonSignsVisible = false;
-	nextBtnVisible = false;
-
-	funPtr = []() {
-		MessageBox(this_parent, "Ошибка при выполнении запроса", NULL, MB_ICONERROR | MB_OK);
-	};
-}
-
-OUTPUT_DATA_STATE_15::OUTPUT_DATA_STATE_15() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = true;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
-
-	funPtr = []() {
-		Button_Enable(this_btnNextHwnd, false);
-	};
-}
-
-SELECT_ATTRIBUTE_STATE_16::SELECT_ATTRIBUTE_STATE_16() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
-
-	funPtr = []() {
-		ListBox_Enable(this_llTableFieldsHwnd, true);
-		Button_Enable(this_btnOkHwnd, false); 
-		Button_Enable(this_btnNextHwnd, false);
-		ComboBox_ResetContent(this_llComparisonSignsHwnd);
-	};
-}
-
-SELECT_COMPARISON_SIGN_STATE_17::SELECT_COMPARISON_SIGN_STATE_17() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
-
-	funPtr = []() {
-		ListBox_Enable(this_llTableFieldsHwnd, false);
-		ComboBox_Enable(this_llComparisonSignsHwnd, true);
-		Button_Enable(this_btnNextHwnd, true);
-
-		ComboBox_ResetContent(this_llComparisonSignsHwnd);
-		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT(">"));
-		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT(">="));
-		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT("<"));
-		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT("<="));
-		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT("="));
-		ComboBox_SetCurSel(this_llComparisonSignsHwnd, 0);
-	};
-}
-
-SELECT_COMPARISON_VALUE_STATE_18::SELECT_COMPARISON_VALUE_STATE_18() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
-
-	funPtr = []() {
-		ComboBox_Enable(this_llComparisonSignsHwnd, false);
-		Edit_Enable(this_etComparisonValueHwnd, true);
-		Button_Enable(this_btnNextHwnd, true);
-		ComboBox_ResetContent(this_llComparisonSignsHwnd);
-	};
-}
-
-SELECT_LOGICAL_CONDITION_STATE_19::SELECT_LOGICAL_CONDITION_STATE_19() : STATE() {
-	tableNameVisible = true;
-	tableAttrsVisible = true;
-	okBtnVisible = true;
-	selectResultVisible = false;
-	sqlStatementVisible = true;
-
-	comparisonValueVisible = true;
-	comparisonSignsVisible = true;
-	nextBtnVisible = true;
-
-	funPtr = []() {
-		ComboBox_Enable(this_llComparisonSignsHwnd, true);
-		Edit_Enable(this_etComparisonValueHwnd, false);
-		Button_Enable(this_btnNextHwnd, true);
-		Button_Enable(this_btnOkHwnd, true);
-
-		Edit_SetText(this_etComparisonValueHwnd, "");
-		ComboBox_ResetContent(this_llComparisonSignsHwnd);
-		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT("AND"));
-		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT("OR"));
-		ComboBox_SetCurSel(this_llComparisonSignsHwnd, 0);
-	};
-}
-
-
-
-
-
-
-

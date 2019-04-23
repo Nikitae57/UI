@@ -44,6 +44,7 @@ HMENU initializeMenu(HWND parent) {
   SetMenu(parent, menu);
   SetMenu(parent, dropDownMenuItem);
 
+
   return menu;
 }
 
