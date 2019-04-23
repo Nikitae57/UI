@@ -30,16 +30,6 @@ const UINT_PTR actionQueryMode = 1337;
 const UINT_PTR actionTableMode = 2608;
 
 int currentState;
-
-char buffer[2048];
-bool attrBeenSelected = false;
-
-int selectedColumnsNumber = 0;
-char **selectedColumns;
-
-char **tableColumns;
-int tableColumnsNumber = 0;
-
 HINSTANCE hInstance;
 
 #endif //LAB5_MAIN_H
