@@ -13,15 +13,6 @@
 #include "DbHandler.h"
 #include "enums.h"
 
-char buffer[2048];
-bool attrBeenSelected = false;
-
-int selectedColumnsNumber = 0;
-char **selectedColumns;
-
-char **tableColumns;
-int tableColumnsNumber = 0;
-
 void initStateHandler(
 	HWND parent,
     HWND etTableName,
@@ -40,5 +31,6 @@ void initStateHandler(
 void initStateMatrix();
 void initTransitionMatrix();
 void initContextMatrix();
+void switchContext(UI_STATES st);
 
 #endif //LAB5_STATEHANDLER_H
