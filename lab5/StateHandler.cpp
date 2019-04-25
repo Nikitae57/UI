@@ -21,6 +21,7 @@ const int UI_INPUT_SIGNALS_COUNT = 6;
 void(*stateMatrix[6][15])();
 UI_STATES transitionMatrix[6][15];
 UI_CONTEXT_STATE contextMatrix[15][10];
+UI_STATES currentState;
 
 std::map<UI_ELEMENTS, HWND> elementsToHwnd;
 
@@ -207,6 +208,7 @@ void initContextMatrix() {
 	}
 
 }
+
 void switchContext(UI_STATES st) {
 	switch (contextMatrix[st][UI_ELEMENTS::MENU])
 	{
@@ -264,4 +266,10 @@ void switchContext(UI_STATES st) {
 			// TO DO implements -> switchState(UI_INPUT::OK_BTN)
 		}
 	}
+}
+
+void switchState(UI_INPUT_SIGNALS signal) {
+    stateMatrix[signal][currentState]();
+    currentState = transitionMatrix[signal][currentState];
+    switchContext(currentState);
 }

@@ -27,7 +27,7 @@ void initStateHandler(
 	HMENU hMenu
 );
 
-//void switchState(UI_S state);
+void switchState(UI_INPUT_SIGNALS signal);
 void initStateMatrix();
 void initTransitionMatrix();
 void initContextMatrix();
