@@ -29,7 +29,6 @@ const int ID_NEXT_BTN = 8904;
 const UINT_PTR actionQueryMode = 1337;
 const UINT_PTR actionTableMode = 2608;
 
-int currentState;
 HINSTANCE hInstance;
 
 #endif //LAB5_MAIN_H

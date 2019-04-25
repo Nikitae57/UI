@@ -1,3 +1,0 @@
-D:/projects/ui/lab3_1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-D:/projects/ui/lab3_1/cmake-build-debug/CMakeFiles/lab3_1.dir
-D:/projects/ui/lab3_1/cmake-build-debug/CMakeFiles/edit_cache.dir

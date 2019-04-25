@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="dataSourceStorageLocal">
-    <data-source name="jdbc:mysql://localhost:3306/mydb?useLegacyDatetimeCode=false&amp;amp&amp;serverTimezone=UTC" uuid="7e385963-3eb1-444c-8f27-5c53f7b6ecb8">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL" exact-version="0" />
-      <secret-storage>forget</secret-storage>
-    </data-source>
-  </component>
-</project>
