@@ -33,4 +33,18 @@ void initTransitionMatrix();
 void initContextMatrix();
 void switchContext(UI_STATES st);
 
+void inflateTableAttrsLb(char **items, int nItems);
+void ResetContext();
+void inflateLvHeader(char** titles, int columnsNumber);
+void tableAttrSelected();
+void addAttributeToQuery();
+void finishSelectQuery();
+void addSectionFromAndWhere();
+bool addComparisonValue();
+void inflateSelectLvBody(
+    char*** selectResult,
+    int rowCount,
+    int colCount
+);
+
 #endif //LAB5_STATEHANDLER_H

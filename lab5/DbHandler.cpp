@@ -47,32 +47,6 @@ static int getTableColumnsCallback(void *NotUsed, int argc, char **argv, char **
   return 0;
 }
 
-void makeSelectQueryWithoutCondition(
-    char *tableName,
-    char **attrs,
-    char *result,
-    int attrsCount
-) {
-  if (attrsCount == 0) {
-    sprintf(result, "SELECT * FROM %s", tableName);
-    return;
-  }
-
-  std::string tmp = "SELECT ";
-  for (int i = 0; i < attrsCount; i++) {
-    tmp += attrs[i];
-    if (i == attrsCount - 1) {
-      tmp += " ";
-    } else {
-      tmp += ", ";
-    }
-  }
-  tmp += "FROM ";
-  tmp += tableName;
-
-  strcpy(result, tmp.c_str());
-}
-
 char ***makeSelectQuery(
     char *selectStatement,
     int *rowNumber
