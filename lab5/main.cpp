@@ -9,9 +9,7 @@
 
 #include "main.h"
 #include "StateHandler.h"
-
 extern UI_STATES currentState;
-extern bool isErr;
 
 LRESULT CALLBACK mainWindowProc(
     HWND hwnd,
@@ -59,26 +57,6 @@ LRESULT CALLBACK etTableProc(
     case WM_KEYDOWN: {
       if (wParam == VK_RETURN) {
           switchState(UI_INPUT_SIGNALS::ENTER_KEY_PRESSED);
-//		  else if (currentState == 9) {
-//			  CONNECT_TO_BD_STATE_10 st10;
-//			  switchState(st10);
-//			  currentState = 10;
-//			  GetWindowText(hwnd, buffer, 2048);
-//			  tableColumns = getTableColumns(buffer, &tableColumnsNumber);
-//			  if (tableColumns != NULL && tableColumnsNumber > 0) {
-//				  SELECT_ATTRIBUTES_12 st12;
-//				  switchState(st12);
-//				  currentState = 12;
-//				  inflateTableAttrsLb(tableColumns, tableColumnsNumber);
-//			  }
-//			  else {
-//				  FAILED_CONNECT_STATE_11 st11;
-//				  switchState(st11);
-//				  SELECT_TABLE_STATE_9 st9;
-//				  switchState(st9);
-//				  currentState = 9;
-//			  }
-//		  }
       }
 
       return 0;
@@ -238,16 +216,6 @@ void handleWmCommand(
       switch (HIWORD(wParam)) {
         case LBN_DBLCLK: {
             switchState(UI_INPUT_SIGNALS::DOUBLE_CLICK_ATTR);
-//			if (currentState == 5 || currentState == 12) {
-//				tableAttrSelected();
-//			}
-//			else if (currentState == 16) {
-//				addAttributeToQuery();
-//				struct SELECT_COMPARISON_SIGN_STATE_17 st17;
-//				switchState(st17);
-//				currentState = 17;
-//			}
-          
         }
       }
       return;
@@ -255,89 +223,11 @@ void handleWmCommand(
 
     case ID_OK_BTN: {
         switchState(UI_INPUT_SIGNALS::CLICK_OK_BTN);
-//		if (currentState == 8 || currentState == 15) {
-//			SELECT_MODE_STATE_1 st;
-//			switchState(st);
-//			currentState = 1;
-//			ResetContext();
-//		}
-//		else if (currentState == 12 || currentState == 19) {
-//			struct CONNECT_TO_BD_STATE_13 st13;
-//			switchState(st13);
-//			if (currentState != 19) {
-//				finishSelectQuery();
-//			}
-//			currentState = 13;
-//			int columnsToInflate;
-//			if (selectedColumnsNumber > 0) {
-//				inflateLvHeader(selectedColumns, selectedColumnsNumber);
-//				columnsToInflate = selectedColumnsNumber;
-//			}
-//			else {
-//				inflateLvHeader(tableColumns, tableColumnsNumber);
-//				columnsToInflate = tableColumnsNumber;
-//			}
-//
-//			char* selectStatement = (char*)malloc(sizeof(char) * 500);
-//			GetWindowText(etSelectQueryHwnd, selectStatement, 500);
-//
-//			int rowCount;
-//			char*** selectResult = makeSelectQuery(selectStatement, &rowCount);
-//			free(selectStatement);
-//			if (selectResult != NULL) {
-//				OUTPUT_DATA_STATE_15 st15;
-//				switchState(st15);
-//				currentState = 15;
-//				inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
-//				for (int i = 0; i < rowCount; i++) {
-//					for (int j = 0; j < selectedColumnsNumber; j++) {
-//						free(selectResult[i][j]);
-//					}
-//					free(selectResult[i]);
-//				}
-//				free(selectResult);
-//			}
-//			else {
-//				FAILED_CONNECT_STATE_14 st14;
-//				switchState(st14);
-//				SELECT_TABLE_STATE_9 st9;
-//				switchState(st9);
-//				currentState = 9;
-//				ResetContext();
-//			}
-//		}
-
-      return;
+		return;
     }
 
     case ID_NEXT_BTN: {
         switchState(UI_INPUT_SIGNALS::CLICK_NEXT_BTN);
-//		if (currentState == 12) {
-//			struct SELECT_ATTRIBUTE_STATE_16 st16;
-//			switchState(st16);
-//			currentState = 16;
-//			addSectionFromAndWhere();
-//
-//		}
-//		else if (currentState == 17) {
-//			struct SELECT_COMPARISON_VALUE_STATE_18 st18;
-//			addComboBoxItem();
-//			switchState(st18);
-//			currentState = 18;
-//		}
-//		else if (currentState == 18) {
-//			if (addComparisonValue()) {
-//				struct SELECT_LOGICAL_CONDITION_STATE_19 st19;
-//				switchState(st19);
-//				currentState = 19;
-//			}
-//		}
-//		else if (currentState == 19) {
-//			struct SELECT_ATTRIBUTE_STATE_16 st16;
-//			addComboBoxItem();
-//			switchState(st16);
-//			currentState = 16;
-//		}
 		return;
     }
 
@@ -367,6 +257,12 @@ LRESULT CALLBACK mainWindowProc(
       handleWmCommand(hwnd, msg, wParam, lParam);
       return 0;
     }
+
+	case WM_ERRMSG: {
+		currentState = (UI_STATES)lParam;
+		switchContext(currentState);
+		return 0;
+	}
 
     case WM_DESTROY: {
       PostQuitMessage(0);
