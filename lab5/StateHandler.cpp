@@ -26,15 +26,14 @@ UI_STATES currentState;
 std::map<UI_ELEMENTS, HWND> elementsToHwnd;
 
 char ErrorMSG[256] = "Ошибка";
-bool isErr = false;
 
 char buffer[2048];
 bool attrBeenSelected = false;
 
 int selectedColumnsNumber = 0;
-char **selectedColumns;
+char **selectedColumns = nullptr;
 
-char **tableColumns;
+char **tableColumns = nullptr;
 int tableColumnsNumber = 0;
 
 void initStateHandler(
@@ -85,12 +84,11 @@ void initStateMatrix() {
         tableColumns = getTableColumns(buffer, &tableColumnsNumber);
         if (tableColumns != NULL && tableColumnsNumber > 0) {
             inflateTableAttrsLb(tableColumns, tableColumnsNumber);
-            isErr = false;
         }
         else {
-            isErr = true;
+			strcpy(ErrorMSG, "Таблица не найдена");
+			PostMessage(this_parent, WM_ERRMSG, (WPARAM)0, (LPARAM)UI_STATES::ERROR_MSG_4);
         }
-        Edit_SetText(this_etTableNameHwnd, "");
     };
 
     stateMatrix[UI_INPUT_SIGNALS::DOUBLE_CLICK_ATTR][UI_STATES::TABLE_ATTRS_SELECTION_3] = []() {
@@ -113,20 +111,19 @@ void initStateMatrix() {
         GetWindowText(this_etSelectQueryHwnd, selectStatement, 500);
 
         int rowCount;
-        char*** selectResult = makeSelectQuery(selectStatement, &rowCount);
+		char ***selectResult = makeSelectQuery(selectStatement, &rowCount);
         free(selectStatement);
         if (selectResult != NULL) {
             inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
-            isErr = false;
         }
         else {
-            isErr = true;
+			strcpy(ErrorMSG, "Ошибка при выполнении запроса");
+			PostMessage(this_parent, WM_ERRMSG, (WPARAM)0, (LPARAM)UI_STATES::ERROR_MSG_4);
         }
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::ERROR_MSG_4] = []() {
         ResetContext();
-        isErr = false;
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::QUERY_RESULT_OUTPUT_5] = []() {
@@ -134,47 +131,114 @@ void initStateMatrix() {
     };
 
     stateMatrix[UI_INPUT_SIGNALS::ENTER_KEY_PRESSED][UI_STATES::TABLE_SELECTION_6] = []() {
-
+		GetWindowText(this_etTableNameHwnd, buffer, 2048);
+		tableColumns = getTableColumns(buffer, &tableColumnsNumber);
+		if (tableColumns != NULL && tableColumnsNumber > 0) {
+			inflateTableAttrsLb(tableColumns, tableColumnsNumber);
+		}
+		else {
+			strcpy(ErrorMSG, "Таблица не найдена");
+			PostMessage(this_parent, WM_ERRMSG, (WPARAM)0, (LPARAM)UI_STATES::ERROR_MSG_8);
+		}
     };
 
     stateMatrix[UI_INPUT_SIGNALS::DOUBLE_CLICK_ATTR][UI_STATES::TABLE_ATTRS_SELECTION_7] = []() {
-
+		tableAttrSelected();
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::TABLE_ATTRS_SELECTION_7] = []() {
+		finishSelectQuery();
+		int columnsToInflate;
+		if (selectedColumnsNumber > 0) {
+			inflateLvHeader(selectedColumns, selectedColumnsNumber);
+			columnsToInflate = selectedColumnsNumber;
+		}
+		else {
+			inflateLvHeader(tableColumns, tableColumnsNumber);
+			columnsToInflate = tableColumnsNumber;
+		}
 
+		char* selectStatement = (char*)malloc(sizeof(char) * 500);
+		GetWindowText(this_etSelectQueryHwnd, selectStatement, 500);
+
+		int rowCount;
+		char ***selectResult = makeSelectQuery(selectStatement, &rowCount);
+		free(selectStatement);
+		if (selectResult != NULL) {
+			inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
+		}
+		else {
+			strcpy(ErrorMSG, "Ошибка при выполнении запроса");
+			PostMessage(this_parent, WM_ERRMSG, (WPARAM)0, (LPARAM)UI_STATES::ERROR_MSG_8);
+		}
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_NEXT_BTN][UI_STATES::TABLE_ATTRS_SELECTION_7] = []() {
-
+		addSectionFromAndWhere();
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::ERROR_MSG_8] = []() {
-
+		ResetContext();
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::QUERY_RESULT_OUTPUT_9] = []() {
-
+		ResetContext();
     };
 
     stateMatrix[UI_INPUT_SIGNALS::DOUBLE_CLICK_ATTR][UI_STATES::TABLE_ATTR_SELECTION_10] = []() {
-
+		addAttributeToQuery();
+		ComboBox_ResetContent(this_llComparisonSignsHwnd);
+		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT(">"));
+		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT(">="));
+		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT("<"));
+		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT("<="));
+		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT("="));
+		ComboBox_SetCurSel(this_llComparisonSignsHwnd, 0);
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_NEXT_BTN][UI_STATES::COMPARISON_SIGN_SELECTION_11] = []() {
-
+		addComboBoxItem();
+		ComboBox_ResetContent(this_llComparisonSignsHwnd);
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_NEXT_BTN][UI_STATES::COMPARISON_VALUE_INPUT_12] = []() {
-
+		addComparisonValue();
+		Edit_SetText(this_etComparisonValueHwnd, "");
+		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT("AND"));
+		ComboBox_AddString(this_llComparisonSignsHwnd, TEXT("OR"));
+		ComboBox_SetCurSel(this_llComparisonSignsHwnd, 0);
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::LOGICAL_OPERATION_SELECTION_13] = []() {
+		ComboBox_ResetContent(this_llComparisonSignsHwnd);
+		int columnsToInflate;
+		if (selectedColumnsNumber > 0) {
+			inflateLvHeader(selectedColumns, selectedColumnsNumber);
+			columnsToInflate = selectedColumnsNumber;
+		}
+		else {
+			inflateLvHeader(tableColumns, tableColumnsNumber);
+			columnsToInflate = tableColumnsNumber;
+		}
 
+		char* selectStatement = (char*)malloc(sizeof(char) * 500);
+		GetWindowText(this_etSelectQueryHwnd, selectStatement, 500);
+
+		int rowCount;
+		char ***selectResult = makeSelectQuery(selectStatement, &rowCount);
+		free(selectStatement);
+		if (selectResult != NULL) {
+			inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
+		}
+		else {
+			strcpy(ErrorMSG, "Ошибка при выполнении запроса");
+			PostMessage(this_parent, WM_ERRMSG, (WPARAM)0, (LPARAM)UI_STATES::ERROR_MSG_8);
+		}
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_NEXT_BTN][UI_STATES::LOGICAL_OPERATION_SELECTION_13] = []() {
-
+		addComboBoxItem();
+		ComboBox_ResetContent(this_llComparisonSignsHwnd);
     };
 }
 
@@ -231,7 +295,7 @@ void initContextMatrix() {
 		"0021112110",
 		"0011112120",
 		"0011112210",
-		"0011122110",
+		"0011122120",
 		"0000000000"
 	};
 
@@ -346,17 +410,19 @@ void ResetContext() {
 			ListView_DeleteColumn(this_llSelectHwnd, 0);
 		}
 	}
-
 	tableColumnsNumber = 0;
 	selectedColumnsNumber = 0;
 }
 
 void inflateLvHeader(char** titles, int columnsNumber) {
+	char tmp[256];
     for (int i = 0; i < columnsNumber; i++) {
+		strcpy(tmp, titles[i]);
         LV_COLUMN col;
         col.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM;
         col.cx = 100;
-        col.pszText = titles[i];
+        col.pszText = tmp;
+		col.cchTextMax = 256;
         col.iSubItem = i;
         ListView_InsertColumn(this_llSelectHwnd, i, &col);
     }
@@ -458,13 +524,16 @@ void addComboBoxItem() {
 
 bool addComparisonValue() {
 	char value[256];
+	char tmp[2048];
 	Edit_GetText(this_etComparisonValueHwnd, value, 256);
+	GetWindowText(this_etSelectQueryHwnd, buffer, 2048);
 	if (strcmp(value, "") == 0) {
+		sprintf(tmp, "%s %d", buffer, 0);
+		SetWindowText(this_etSelectQueryHwnd, tmp);
 		return false;
 	}
 	else {
-		char tmp[2048];
-		GetWindowText(this_etSelectQueryHwnd, buffer, 2048);
+		
 		sprintf(tmp, "%s %s", buffer, value);
 		SetWindowText(this_etSelectQueryHwnd, tmp);
 		return true;
@@ -477,6 +546,7 @@ void inflateSelectLvBody(
     int colCount
 ) {
 
+	char tmp[256];
     LV_ITEM item;
     memset(&item, 0, sizeof(LV_ITEM));
     item.mask = LVIF_TEXT;
@@ -484,8 +554,9 @@ void inflateSelectLvBody(
         item.iItem = i;
         for (int j = 0; j < colCount; j++) {
             item.iSubItem = j;
-            item.pszText = selectResult[i][j];
-            item.cchTextMax = 256;
+			strcpy(tmp, selectResult[i][j]);
+			item.pszText = tmp;
+			item.cchTextMax = 256;
             ListView_InsertItem(this_llSelectHwnd, &item);
             ListView_SetItem(this_llSelectHwnd, &item);
         }

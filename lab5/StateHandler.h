@@ -13,6 +13,8 @@
 #include "DbHandler.h"
 #include "enums.h"
 
+#define WM_ERRMSG WM_USER + 1
+
 void initStateHandler(
 	HWND parent,
     HWND etTableName,
@@ -40,6 +42,7 @@ void tableAttrSelected();
 void addAttributeToQuery();
 void finishSelectQuery();
 void addSectionFromAndWhere();
+void addComboBoxItem();
 bool addComparisonValue();
 void inflateSelectLvBody(
     char*** selectResult,
