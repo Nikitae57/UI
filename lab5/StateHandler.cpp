@@ -115,6 +115,14 @@ void initStateMatrix() {
         free(selectStatement);
         if (selectResult != NULL) {
             inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
+
+            for (int i = 0; i < rowCount; i++) {
+                for (int j = 0; j < columnsToInflate; j++) {
+                    free(selectResult[i][j]);
+                }
+                free(selectResult[i]);
+            }
+            free(selectResult);
         }
         else {
 			strcpy(ErrorMSG, "Ошибка при выполнении запроса");
@@ -166,6 +174,13 @@ void initStateMatrix() {
 		free(selectStatement);
 		if (selectResult != NULL) {
 			inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
+            for (int i = 0; i < rowCount; i++) {
+                for (int j = 0; j < columnsToInflate; j++) {
+                    free(selectResult[i][j]);
+                }
+                free(selectResult[i]);
+            }
+            free(selectResult);
 		}
 		else {
 			strcpy(ErrorMSG, "Ошибка при выполнении запроса");
@@ -229,6 +244,13 @@ void initStateMatrix() {
 		free(selectStatement);
 		if (selectResult != NULL) {
 			inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
+            for (int i = 0; i < rowCount; i++) {
+                for (int j = 0; j < columnsToInflate; j++) {
+                    free(selectResult[i][j]);
+                }
+                free(selectResult[i]);
+            }
+            free(selectResult);
 		}
 		else {
 			strcpy(ErrorMSG, "Ошибка при выполнении запроса");
@@ -449,7 +471,7 @@ void tableAttrSelected() {
     }
 
     selectedColumns[selectedColumnsNumber] = (char*)
-        malloc(sizeof(char) * strlen(attrName));
+        malloc(sizeof(char) * strlen(attrName) + 1);
     strcpy(selectedColumns[selectedColumnsNumber], attrName);
     selectedColumnsNumber++;
 
