@@ -31,7 +31,8 @@ void initStateHandler(
     HWND btnUp,
     HWND btnDown,
     HWND btnCancel,
-    HWND btnArchive
+    HWND btnArchive,
+    HWND llArchive
 );
 
 void switchState(UI_INPUT_SIGNALS signal);

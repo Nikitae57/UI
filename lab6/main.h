@@ -19,6 +19,7 @@ HWND btnNextHwnd;
 HWND etComparisonValueHwnd;
 HWND llComparisonSignsHwnd;
 
+HWND llArchive;
 HWND btnUp;
 HWND btnDown;
 HWND btnCancel;

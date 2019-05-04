@@ -234,6 +234,18 @@ void initUi(HWND hwnd) {
         NULL
     );
 
+    llArchive = CreateWindow(
+        TEXT("listbox"),
+        TEXT("Archive"),
+        WS_CHILD | WS_VISIBLE | LBS_STANDARD | WS_VSCROLL | WS_BORDER | LBS_NOTIFY,
+        10, 50,
+        400, 300,
+        hwnd,
+        (HMENU) ID_TABLE_ATTRS_LISTBOX,
+        hInstance,
+        NULL
+    );
+
     initStateHandler(
         hwnd,
         etTableNameHwnd,
@@ -248,7 +260,8 @@ void initUi(HWND hwnd) {
         btnUp,
         btnDown,
         btnCancel,
-        btnArchive
+        btnArchive,
+        llArchive
     );
 }
 
