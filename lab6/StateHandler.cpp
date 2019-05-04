@@ -46,8 +46,8 @@ char **tableColumns = nullptr;
 int tableColumnsNumber = 0;
 
 bool returningState = false;
-
 std::stack<UI_STATES> stateStack;
+int archivedSelectColsCount = 0;
 
 void initStateHandler(
 	HWND parent,
@@ -184,9 +184,17 @@ void initStateMatrix() {
             free(selectResult[i]);
         }
         free(selectResult);
+
+        archivedSelectColsCount = colCount;
     };
 
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::ARCHIVE_SELECT_RESULT_OUTPUT_16] = [] { returningState = true; };
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::ARCHIVE_SELECT_RESULT_OUTPUT_16] = [] {
+        returningState = true;
+        for (int i = 0; i < archivedSelectColsCount; i++) {
+            ListView_DeleteColumn(this_llSelectHwnd, 0);
+        }
+        archivedSelectColsCount = 0;
+    };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_MENU_TABLE][UI_STATES::MODE_SELECTION_1] = []() {
         ResetContext();
