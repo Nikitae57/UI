@@ -55,7 +55,7 @@ void inflateSelectLvBody(
     int rowCount,
     int colCount
 );
-void saveQuery();
-void returnState();
+void saveQueryToFile();
+void inflateArchive();
 
 #endif //LAB5_STATEHANDLER_H

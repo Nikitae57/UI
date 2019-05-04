@@ -1,6 +1,7 @@
 #include "StateHandler.h"
 #include <stack>
 #include <fstream>
+#include <vector>
 
 HWND this_parent;
 HWND this_etTableNameHwnd;
@@ -94,19 +95,24 @@ void initStateHandler(
 }
 
 void initStateMatrix() {
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::MODE_SELECTION_1] = []() { stateStack.push(currentState); };
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::TABLE_SELECTION_2] = []() { stateStack.push(currentState); };
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::TABLE_ATTRS_SELECTION_3] = []() { stateStack.push(currentState); };
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::ERROR_MSG_4] = []() { stateStack.push(currentState); };
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::QUERY_RESULT_OUTPUT_5] = []() { stateStack.push(currentState); };
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::TABLE_SELECTION_6] = []() { stateStack.push(currentState); };
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::TABLE_ATTRS_SELECTION_7] = []() { stateStack.push(currentState); };
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::ERROR_MSG_8] = []() {};
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::QUERY_RESULT_OUTPUT_9] = []() { stateStack.push(currentState); };
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::TABLE_ATTR_SELECTION_10] = []() { stateStack.push(currentState); };
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::COMPARISON_SIGN_SELECTION_11] = []() { stateStack.push(currentState); };
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::COMPARISON_VALUE_INPUT_12] = []() { stateStack.push(currentState); };
-    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::LOGICAL_OPERATION_SELECTION_13] = []() { stateStack.push(currentState); };
+    const auto archiveLambda = []() {
+        stateStack.push(currentState);
+        inflateArchive();
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::MODE_SELECTION_1] = archiveLambda;
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::TABLE_SELECTION_2] = archiveLambda;
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::TABLE_ATTRS_SELECTION_3] = archiveLambda;
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::ERROR_MSG_4] = archiveLambda;
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::QUERY_RESULT_OUTPUT_5] = archiveLambda;
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::TABLE_SELECTION_6] = archiveLambda;
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::TABLE_ATTRS_SELECTION_7] = archiveLambda;
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::ERROR_MSG_8] = archiveLambda;
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::QUERY_RESULT_OUTPUT_9] = archiveLambda;
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::TABLE_ATTR_SELECTION_10] = archiveLambda;
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::COMPARISON_SIGN_SELECTION_11] = archiveLambda;
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::COMPARISON_VALUE_INPUT_12] = archiveLambda;
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::LOGICAL_OPERATION_SELECTION_13] = archiveLambda;
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_CANCEL_BTN][UI_STATES::ARCHIVE_OPENED_14] = []() { returningState = true; };
 
@@ -174,7 +180,7 @@ void initStateMatrix() {
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::QUERY_RESULT_OUTPUT_5] = []() {
-        saveQuery();
+        saveQueryToFile();
         ResetContext();
     };
 
@@ -237,7 +243,7 @@ void initStateMatrix() {
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::QUERY_RESULT_OUTPUT_9] = []() {
-        saveQuery();
+        saveQueryToFile();
 		ResetContext();
     };
 
@@ -648,11 +654,40 @@ void inflateSelectLvBody(
     }
 }
 
-void saveQuery() {
+void saveQueryToFile() {
     char buffer[2000];
     GetWindowText(this_etSelectQueryHwnd, buffer, 2000);
 
     std::ofstream outfile;
     outfile.open("archive.txt", std::ios_base::app);
     outfile << buffer << std::endl;
+}
+
+void inflateArchive() {
+    SendMessage(
+        this_llArchive,
+        LB_RESETCONTENT,
+        0, 0L
+    );
+
+    std::ifstream archiveFile("archive.txt");
+    std::string line;
+    std::vector<std::string> lines;
+
+    while (std::getline(archiveFile, line)) {
+       lines.push_back(line);
+    }
+
+    for (int i = 0; i < lines.size(); i++) {
+        int pos = (int) SendMessage(
+            this_llArchive,
+            LB_ADDSTRING,
+            0,
+            (LPARAM) lines[i].c_str()
+        );
+
+        SendMessage(this_llArchive, LB_SETITEMDATA, pos, (LPARAM) i);
+    }
+
+    SetFocus(this_llArchive);
 }
