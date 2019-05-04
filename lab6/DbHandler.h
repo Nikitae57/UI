@@ -7,4 +7,10 @@ char ***makeSelectQuery(
     char *selectStatement,
     int *rowNumber
 );
+char ***makeSelectQuery(
+    char *selectStatement,
+    int *rowNumber,
+    int *colCount,
+    char ***colNames
+);
 #endif //LAB5_DBHANDLER_H

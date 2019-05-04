@@ -24,7 +24,7 @@ HWND this_btnCancel;
 HWND this_btnArchvie;
 
 const int UI_ELEMENTS_COUNT = 15;
-const int UI_STATES_COUNT = 17;
+const int UI_STATES_COUNT = 18;
 const int UI_INPUT_SIGNALS_COUNT = 10;
 
 void(*stateMatrix[UI_INPUT_SIGNALS_COUNT][UI_STATES_COUNT])();
@@ -157,6 +157,37 @@ void initStateMatrix() {
     stateMatrix[UI_INPUT_SIGNALS::CLICK_CANCEL_BTN][UI_STATES::ARCHIVE_OPENED_14] = []() { returningState = true; };
     stateMatrix[UI_INPUT_SIGNALS::CLICK_CANCEL_BTN][UI_STATES::ARCHIVE_ITEM_SELECTED_15] = []() { returningState = true; };
 
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::ARCHIVE_ITEM_SELECTED_15] = []() {
+        int selectedPos = ListBox_GetCurSel(this_llArchive);
+        if (selectedPos == LB_ERR) { return; }
+
+        char selectQuery[1000];
+        ListBox_GetText(this_llArchive, selectedPos, selectQuery);
+
+        int rowCount;
+        int colCount;
+        char **colNames;
+
+        char ***selectResult = makeSelectQuery(selectQuery, &rowCount, &colCount, &colNames);
+        inflateLvHeader(colNames, colCount);
+        inflateSelectLvBody(selectResult, rowCount, colCount);
+
+        for (int i = 0; i < colCount; i++) {
+            free(colNames[i]);
+        }
+        free(colNames);
+
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < colCount; j++) {
+                free(selectResult[i][j]);
+            }
+            free(selectResult[i]);
+        }
+        free(selectResult);
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::ARCHIVE_SELECT_RESULT_OUTPUT_16] = [] { returningState = true; };
+
     stateMatrix[UI_INPUT_SIGNALS::CLICK_MENU_TABLE][UI_STATES::MODE_SELECTION_1] = []() {
         ResetContext();
     };
@@ -242,6 +273,7 @@ void initStateMatrix() {
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::TABLE_ATTRS_SELECTION_7] = []() {
+        // TODO here
 		finishSelectQuery();
 		int columnsToInflate;
 		if (selectedColumnsNumber > 0) {
@@ -408,6 +440,8 @@ void initTransitionMatrix() {
 
     transitionMatrix[UI_INPUT_SIGNALS::CLICK_DOWN_BTN][UI_STATES::ARCHIVE_OPENED_14] = UI_STATES::ARCHIVE_ITEM_SELECTED_15;
     transitionMatrix[UI_INPUT_SIGNALS::CLICK_DOWN_BTN][UI_STATES::ARCHIVE_ITEM_SELECTED_15] = UI_STATES::ARCHIVE_ITEM_SELECTED_15;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::ARCHIVE_ITEM_SELECTED_15] = UI_STATES::ARCHIVE_SELECT_RESULT_OUTPUT_16;
 }
 
 void initContextMatrix() {
@@ -428,6 +462,7 @@ void initContextMatrix() {
 		"001112212020000", // LOGICAL_OPERATION_SELECTION_13
 		"000001000102220", // ARCHIVE_OPENED_14
 		"000002000102220", // ARCHIVE_ITEM_SELECTED_15
+		"020002000000000", // ARCHIVE_SELECT_RESULT_OUTPUT_16
 		"000000000000000" // FINISH
 	};
 

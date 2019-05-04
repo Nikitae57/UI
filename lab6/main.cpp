@@ -377,7 +377,7 @@ int WINAPI WinMain(
 
     hwnd = CreateWindow(
         mainWindowClass,
-        "lab5",
+        "lab6",
         WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
