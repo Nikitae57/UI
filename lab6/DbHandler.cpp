@@ -97,9 +97,9 @@ char ***makeSelectQuery(
     *colCount = colNumber;
     *rowNumber = currentRow;
     *colNames = (char**) malloc(sizeof(char*) * colNumber);
-    for (int i = 0; i < *colCount; i++) {
-        *colNames[i] = (char*) malloc(sizeof(char) * 200);
-        strcpy(*colNames[i], columnNames[i]);
+    for (int i = 0; i < colNumber; i++) {
+        (*colNames)[i] = (char*) malloc(sizeof(char) * 200);
+        strcpy((*colNames)[i], columnNames[i]);
     }
 
     if (selectResult != nullptr) {
