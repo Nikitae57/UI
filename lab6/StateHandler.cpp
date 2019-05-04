@@ -114,7 +114,48 @@ void initStateMatrix() {
     stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::COMPARISON_VALUE_INPUT_12] = archiveLambda;
     stateMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::LOGICAL_OPERATION_SELECTION_13] = archiveLambda;
 
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_UP_BTN][UI_STATES::ARCHIVE_OPENED_14] = []() {
+        int curPos = ListBox_GetCurSel(this_llArchive);
+        if (curPos <= 0) {
+            ListBox_SetCurSel(this_llArchive, 0);
+        } else {
+            ListBox_SetCurSel(this_llArchive, curPos - 1);
+        }
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_UP_BTN][UI_STATES::ARCHIVE_ITEM_SELECTED_15] = []() {
+        int curPos = ListBox_GetCurSel(this_llArchive);
+        if (curPos <= 0) {
+            ListBox_SetCurSel(this_llArchive, 0);
+        } else {
+            ListBox_SetCurSel(this_llArchive, curPos - 1);
+        }
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_DOWN_BTN][UI_STATES::ARCHIVE_OPENED_14] = []() {
+        int curPos = ListBox_GetCurSel(this_llArchive);
+        int itemCount = ListBox_GetCount(this_llArchive);
+
+        if (curPos >= itemCount) {
+            ListBox_SetCurSel(this_llArchive, itemCount - 1);
+        } else {
+            ListBox_SetCurSel(this_llArchive, curPos + 1);
+        }
+    };
+
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_DOWN_BTN][UI_STATES::ARCHIVE_ITEM_SELECTED_15] = []() {
+        int curPos = ListBox_GetCurSel(this_llArchive);
+        int itemCount = ListBox_GetCount(this_llArchive);
+
+        if (curPos >= itemCount) {
+            ListBox_SetCurSel(this_llArchive, itemCount - 1);
+        } else {
+            ListBox_SetCurSel(this_llArchive, curPos + 1);
+        }
+    };
+
     stateMatrix[UI_INPUT_SIGNALS::CLICK_CANCEL_BTN][UI_STATES::ARCHIVE_OPENED_14] = []() { returningState = true; };
+    stateMatrix[UI_INPUT_SIGNALS::CLICK_CANCEL_BTN][UI_STATES::ARCHIVE_ITEM_SELECTED_15] = []() { returningState = true; };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_MENU_TABLE][UI_STATES::MODE_SELECTION_1] = []() {
         ResetContext();
@@ -361,6 +402,12 @@ void initTransitionMatrix() {
     transitionMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::COMPARISON_SIGN_SELECTION_11] = UI_STATES::ARCHIVE_OPENED_14;
     transitionMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::COMPARISON_VALUE_INPUT_12] = UI_STATES::ARCHIVE_OPENED_14;
     transitionMatrix[UI_INPUT_SIGNALS::CLICK_ARCHIVE_BTN][UI_STATES::LOGICAL_OPERATION_SELECTION_13] = UI_STATES::ARCHIVE_OPENED_14;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_UP_BTN][UI_STATES::ARCHIVE_OPENED_14] = UI_STATES::ARCHIVE_ITEM_SELECTED_15;
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_UP_BTN][UI_STATES::ARCHIVE_ITEM_SELECTED_15] = UI_STATES::ARCHIVE_ITEM_SELECTED_15;
+
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_DOWN_BTN][UI_STATES::ARCHIVE_OPENED_14] = UI_STATES::ARCHIVE_ITEM_SELECTED_15;
+    transitionMatrix[UI_INPUT_SIGNALS::CLICK_DOWN_BTN][UI_STATES::ARCHIVE_ITEM_SELECTED_15] = UI_STATES::ARCHIVE_ITEM_SELECTED_15;
 }
 
 void initContextMatrix() {
