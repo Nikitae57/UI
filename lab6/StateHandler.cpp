@@ -47,7 +47,10 @@ int tableColumnsNumber = 0;
 
 bool returningState = false;
 std::stack<UI_STATES> stateStack;
-int archivedSelectColsCount = 0;
+
+int rowCount;
+int colCount;
+char ***this_selectResult = nullptr;
 
 void initStateHandler(
 	HWND parent,
@@ -158,42 +161,39 @@ void initStateMatrix() {
     stateMatrix[UI_INPUT_SIGNALS::CLICK_CANCEL_BTN][UI_STATES::ARCHIVE_ITEM_SELECTED_15] = []() { returningState = true; };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::ARCHIVE_ITEM_SELECTED_15] = []() {
+        clearListView();
         int selectedPos = ListBox_GetCurSel(this_llArchive);
         if (selectedPos == LB_ERR) { return; }
 
         char selectQuery[1000];
         ListBox_GetText(this_llArchive, selectedPos, selectQuery);
 
-        int rowCount;
-        int colCount;
-        char **colNames;
+        int archive_rowCount;
+        int archive_colCount;
+        char **archive_colNames;
+        char ***archive_selectResult = makeSelectQuery(selectQuery, &archive_rowCount, &archive_colCount, &archive_colNames);
+        inflateLvHeader(archive_colNames, archive_colCount);
+        inflateSelectLvBody(archive_selectResult, archive_rowCount, archive_colCount);
 
-        char ***selectResult = makeSelectQuery(selectQuery, &rowCount, &colCount, &colNames);
-        inflateLvHeader(colNames, colCount);
-        inflateSelectLvBody(selectResult, rowCount, colCount);
-
-        for (int i = 0; i < colCount; i++) {
-            free(colNames[i]);
+        for (int i = 0; i < archive_colCount; i++) {
+            free(archive_colNames[i]);
         }
-        free(colNames);
+        free(archive_colNames);
 
-        for (int i = 0; i < rowCount; i++) {
-            for (int j = 0; j < colCount; j++) {
-                free(selectResult[i][j]);
+        for (int i = 0; i < archive_rowCount; i++) {
+            for (int j = 0; j < archive_colCount; j++) {
+                free(archive_selectResult[i][j]);
             }
-            free(selectResult[i]);
+            free(archive_selectResult[i]);
         }
-        free(selectResult);
-
-        archivedSelectColsCount = colCount;
+        free(archive_selectResult);
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::ARCHIVE_SELECT_RESULT_OUTPUT_16] = [] {
         returningState = true;
-        for (int i = 0; i < archivedSelectColsCount; i++) {
-            ListView_DeleteColumn(this_llSelectHwnd, 0);
-        }
-        archivedSelectColsCount = 0;
+        clearListView();
+        inflateLvHeader(tableColumns, colCount);
+        inflateSelectLvBody(this_selectResult, rowCount, colCount);
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_MENU_TABLE][UI_STATES::MODE_SELECTION_1] = []() {
@@ -222,34 +222,32 @@ void initStateMatrix() {
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::TABLE_ATTRS_SELECTION_3] = []() {
         finishSelectQuery();
-        int columnsToInflate;
+        clearListView();
+
         if (selectedColumnsNumber > 0) {
             inflateLvHeader(selectedColumns, selectedColumnsNumber);
-            columnsToInflate = selectedColumnsNumber;
-        }
-        else {
+            colCount = selectedColumnsNumber;
+        } else {
+            colCount = tableColumnsNumber;
             inflateLvHeader(tableColumns, tableColumnsNumber);
-            columnsToInflate = tableColumnsNumber;
         }
+
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < colCount; j++) {
+                free(this_selectResult[i][j]);
+            }
+            free(this_selectResult[i]);
+        }
+        free(this_selectResult);
 
         char* selectStatement = (char*)malloc(sizeof(char) * 500);
         GetWindowText(this_etSelectQueryHwnd, selectStatement, 500);
 
-        int rowCount;
-		char ***selectResult = makeSelectQuery(selectStatement, &rowCount);
+        this_selectResult = makeSelectQuery(selectStatement, &rowCount);
         free(selectStatement);
-        if (selectResult != NULL) {
-            inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
-
-            for (int i = 0; i < rowCount; i++) {
-                for (int j = 0; j < columnsToInflate; j++) {
-                    free(selectResult[i][j]);
-                }
-                free(selectResult[i]);
-            }
-            free(selectResult);
-        }
-        else {
+        if (this_selectResult != NULL) {
+            inflateSelectLvBody(this_selectResult, rowCount, colCount);
+        } else {
 			strcpy(ErrorMSG, "Ошибка при выполнении запроса");
 			PostMessage(this_parent, WM_ERRMSG, (WPARAM)0, (LPARAM)UI_STATES::ERROR_MSG_4);
         }
@@ -281,35 +279,33 @@ void initStateMatrix() {
     };
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::TABLE_ATTRS_SELECTION_7] = []() {
-        // TODO here
 		finishSelectQuery();
-		int columnsToInflate;
+		clearListView();
+
 		if (selectedColumnsNumber > 0) {
 			inflateLvHeader(selectedColumns, selectedColumnsNumber);
-			columnsToInflate = selectedColumnsNumber;
-		}
-		else {
+			colCount = selectedColumnsNumber;
+		} else {
 			inflateLvHeader(tableColumns, tableColumnsNumber);
-			columnsToInflate = tableColumnsNumber;
+			colCount = tableColumnsNumber;
 		}
+
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < colCount; j++) {
+                free(this_selectResult[i][j]);
+            }
+            free(this_selectResult[i]);
+        }
+        free(this_selectResult);
 
 		char* selectStatement = (char*)malloc(sizeof(char) * 500);
 		GetWindowText(this_etSelectQueryHwnd, selectStatement, 500);
 
-		int rowCount;
-		char ***selectResult = makeSelectQuery(selectStatement, &rowCount);
+		this_selectResult = makeSelectQuery(selectStatement, &rowCount);
 		free(selectStatement);
-		if (selectResult != NULL) {
-			inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
-            for (int i = 0; i < rowCount; i++) {
-                for (int j = 0; j < columnsToInflate; j++) {
-                    free(selectResult[i][j]);
-                }
-                free(selectResult[i]);
-            }
-            free(selectResult);
-		}
-		else {
+		if (this_selectResult != NULL) {
+			inflateSelectLvBody(this_selectResult, rowCount, colCount);
+		} else {
 			strcpy(ErrorMSG, "Ошибка при выполнении запроса");
 			PostMessage(this_parent, WM_ERRMSG, (WPARAM)0, (LPARAM)UI_STATES::ERROR_MSG_8);
 		}
@@ -354,33 +350,24 @@ void initStateMatrix() {
 
     stateMatrix[UI_INPUT_SIGNALS::CLICK_OK_BTN][UI_STATES::LOGICAL_OPERATION_SELECTION_13] = []() {
 		ComboBox_ResetContent(this_llComparisonSignsHwnd);
-		int columnsToInflate;
+		clearListView();
+
 		if (selectedColumnsNumber > 0) {
 			inflateLvHeader(selectedColumns, selectedColumnsNumber);
-			columnsToInflate = selectedColumnsNumber;
-		}
-		else {
+			colCount = selectedColumnsNumber;
+		} else {
 			inflateLvHeader(tableColumns, tableColumnsNumber);
-			columnsToInflate = tableColumnsNumber;
+			colCount = tableColumnsNumber;
 		}
 
 		char* selectStatement = (char*)malloc(sizeof(char) * 500);
 		GetWindowText(this_etSelectQueryHwnd, selectStatement, 500);
 
-		int rowCount;
-		char ***selectResult = makeSelectQuery(selectStatement, &rowCount);
+		this_selectResult = makeSelectQuery(selectStatement, &rowCount);
 		free(selectStatement);
-		if (selectResult != NULL) {
-			inflateSelectLvBody(selectResult, rowCount, columnsToInflate);
-            for (int i = 0; i < rowCount; i++) {
-                for (int j = 0; j < columnsToInflate; j++) {
-                    free(selectResult[i][j]);
-                }
-                free(selectResult[i]);
-            }
-            free(selectResult);
-		}
-		else {
+		if (this_selectResult != NULL) {
+			inflateSelectLvBody(this_selectResult, rowCount, colCount);
+		} else {
 			strcpy(ErrorMSG, "Ошибка при выполнении запроса");
 			PostMessage(this_parent, WM_ERRMSG, (WPARAM)0, (LPARAM)UI_STATES::ERROR_MSG_8);
 		}
@@ -580,17 +567,7 @@ void ResetContext() {
 	ListBox_ResetContent(this_llTableFieldsHwnd);
 	Edit_SetText(this_etSelectQueryHwnd, "");
 	ListView_DeleteAllItems(this_llSelectHwnd);
-
-	if (selectedColumnsNumber > 0) {
-		for (int i = 0; i < selectedColumnsNumber; i++) {
-			ListView_DeleteColumn(this_llSelectHwnd, 0);
-		}
-	}
-	else {
-		for (int i = 0; i < tableColumnsNumber; i++) {
-			ListView_DeleteColumn(this_llSelectHwnd, 0);
-		}
-	}
+	clearColumns();
 	tableColumnsNumber = 0;
 	selectedColumnsNumber = 0;
 }
@@ -780,4 +757,18 @@ void inflateArchive() {
     }
 
     SetFocus(this_llArchive);
+}
+
+void clearColumns() {
+    HWND header = ListView_GetHeader(this_llSelectHwnd);
+    int columnCount = Header_GetItemCount(header);
+
+    for (int i = 0; i < columnCount; i++) {
+        ListView_DeleteColumn(this_llSelectHwnd, 0);
+    }
+}
+
+void clearListView() {
+    ListView_DeleteAllItems(this_llArchive);
+    clearColumns();
 }

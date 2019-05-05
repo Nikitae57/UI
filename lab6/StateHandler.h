@@ -57,5 +57,7 @@ void inflateSelectLvBody(
 );
 void saveQueryToFile();
 void inflateArchive();
+void clearColumns();
+void clearListView();
 
 #endif //LAB5_STATEHANDLER_H
