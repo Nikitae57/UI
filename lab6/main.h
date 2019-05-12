@@ -3,9 +3,6 @@
 #include <windows.h>
 
 const char *mainWindowClass = "WindowAppClass";
-const char *etTableNameClass = "etTableNameClass";
-const char *etSelectQueryClass = "etSelectQueryClass";
-const char *llTableFieldsClass = "llTableFieldsClass";
 
 WNDPROC etTableNameProc;
 
