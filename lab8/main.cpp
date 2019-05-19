@@ -3,14 +3,23 @@
 #include <windows.h>
 #include <string>
 #include <commctrl.h>
+#include <iostream>
 
 HINSTANCE hInstance;
 char szClassName[] = "WindowAppClass";
 
 HWND parentHwnd;
-HWND btn00, btn01, btn02,
-    btn10, btn11, btn12,
-    btn20, btn21, btn22;
+HWND cell00, cell01, cell02,
+    cell10, cell11, cell12,
+    cell20, cell21, cell22;
+HWND cells[9];
+
+int ID_CELL = 1111;
+char buffer[2];
+
+#define FIRST_PLAYER_TURN 0
+#define SECOND_PLAYER_TURN 1
+int turn = 0;
 
 LRESULT CALLBACK
 WndProc(
@@ -22,78 +31,122 @@ WndProc(
     LPARAM lParam
 );
 
+int winCombinations[8][9] = {
+    {1, 1, 1,
+     0, 0, 0,
+     0, 0, 0},
+
+    {0, 0, 0,
+     1, 1, 1,
+     0, 0, 0},
+
+    {0, 0, 0,
+     0, 0, 0,
+     1, 1, 1},
+
+    {1, 0, 0,
+     1, 0, 0,
+     1, 0, 0},
+
+    {0, 1, 0,
+     0, 1, 0,
+     0, 1, 0},
+
+    {0, 0, 1,
+     0, 0, 1,
+     0, 0, 1},
+
+    {1, 0, 0,
+     0, 1, 0,
+     0, 0, 1},
+
+    {0, 0, 1,
+     0, 1, 0,
+     1, 0, 0},
+};
+
 void initUi(HWND hwnd) {
-    btn00 = CreateWindow(
+    cell00 = CreateWindow(
         "Button", "",
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         10, 10,
         20, 20,
-        hwnd, NULL, hInstance, NULL
+        hwnd, (HMENU) ID_CELL, hInstance, NULL
     );
 
-    btn01 = CreateWindow(
+    cell01 = CreateWindow(
         "Button", "",
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         40, 10,
         20, 20,
-        hwnd, NULL, hInstance, NULL
+        hwnd, (HMENU) ID_CELL, hInstance, NULL
     );
 
-    btn02 = CreateWindow(
+    cell02 = CreateWindow(
         "Button", "",
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         70, 10,
         20, 20,
-        hwnd, NULL, hInstance, NULL
+        hwnd, (HMENU) ID_CELL, hInstance, NULL
     );
 
-    btn10 = CreateWindow(
+    cell10 = CreateWindow(
         "Button", "",
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         10, 40,
         20, 20,
-        hwnd, NULL, hInstance, NULL
+        hwnd, (HMENU) ID_CELL, hInstance, NULL
     );
 
-    btn11 = CreateWindow(
+    cell11 = CreateWindow(
         "Button", "",
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         40, 40,
         20, 20,
-        hwnd, NULL, hInstance, NULL
+        hwnd, (HMENU) ID_CELL, hInstance, NULL
     );
 
-    btn12 = CreateWindow(
+    cell12 = CreateWindow(
         "Button", "",
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         70, 40,
         20, 20,
-        hwnd, NULL, hInstance, NULL
+        hwnd, (HMENU) ID_CELL, hInstance, NULL
     );
 
-    btn20 = CreateWindow(
+    cell20 = CreateWindow(
         "Button", "",
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         10, 70,
         20, 20,
-        hwnd, NULL, hInstance, NULL
+        hwnd, (HMENU) ID_CELL, hInstance, NULL
     );
 
-    btn21 = CreateWindow(
+    cell21 = CreateWindow(
         "Button", "",
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         40, 70,
         20, 20,
-        hwnd, NULL, hInstance, NULL
+        hwnd, (HMENU) ID_CELL, hInstance, NULL
     );
 
-    btn00 = CreateWindow(
+    cell22 = CreateWindow(
         "Button", "",
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         70, 70,
         20, 20,
-        hwnd, NULL, hInstance, NULL
+        hwnd, (HMENU) ID_CELL, hInstance, NULL
     );
+
+    cells[0] = cell00;
+    cells[1] = cell01;
+    cells[2] = cell02;
+    cells[3] = cell10;
+    cells[4] = cell11;
+    cells[5] = cell12;
+    cells[6] = cell20;
+    cells[7] = cell21;
+    cells[8] = cell22;
 }
 
 bool RegClass(WNDPROC proc, LPCSTR szName, UINT color) {
@@ -112,13 +165,112 @@ bool RegClass(WNDPROC proc, LPCSTR szName, UINT color) {
     return RegisterClass(&windowClass);
 }
 
+void winAchieved() {
+    MessageBox(
+        parentHwnd,
+        "Win!",
+        NULL,
+        MB_ICONEXCLAMATION | MB_OK
+    );
+}
+
+void winNotAchieved() {
+    switch (turn) {
+        case FIRST_PLAYER_TURN: {
+            turn = SECOND_PLAYER_TURN;
+            return;
+        }
+
+        case SECOND_PLAYER_TURN: {
+            turn = FIRST_PLAYER_TURN;
+            return;
+        }
+    }
+}
+
+bool checkCombo(int combo[]) {
+    bool isWin = false;
+
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 9; j++) {
+            if (winCombinations[i][j] != combo[j]) {
+                isWin = false;
+                break;
+            } else {
+                isWin = true;
+            }
+        }
+
+        if (isWin) {
+            break;
+        }
+    }
+
+    return isWin;
+}
+
+void winCheck() {
+    char symbol;
+    if (turn == FIRST_PLAYER_TURN) {
+        symbol = 'O';
+    } else {
+        symbol = 'X';
+    }
+
+    int combination[9];
+    for (int i = 0; i < 9; i++) {
+        GetWindowText(cells[i], buffer, 2);
+        if (buffer[0] == symbol) {
+            combination[i] = 1;
+        } else {
+            combination[i] = 0;
+        }
+
+        printf("%d", combination[i]);
+        if ((i + 1) % 3 == 0) {
+            printf("\n");
+        }
+    }
+    printf("\n");
+
+    bool isWinCombo = checkCombo(combination);
+    if (isWinCombo) {
+        winAchieved();
+    } else {
+        winNotAchieved();
+    }
+}
+
+void cellClicked(LPARAM lparam) {
+    GetWindowText((HWND) lparam, buffer, 2);
+    bool isCellFree = strlen(buffer) == 0;
+
+    if (isCellFree) {
+        switch (turn) {
+            case FIRST_PLAYER_TURN: {
+                SetWindowText((HWND) lparam, "O");
+                winCheck();
+                return;
+            }
+
+            case SECOND_PLAYER_TURN: {
+                SetWindowText((HWND) lparam, "X");
+                winCheck();
+                return;
+            }
+        }
+    }
+}
+
 void handleWmCommand(HWND
                      hwnd,
                      UINT msg, WPARAM
                      wParam,
                      LPARAM lParam
 ) {
-
+    if (LOWORD(wParam) == ID_CELL) {
+        cellClicked(lParam);
+    }
 }
 
 LRESULT CALLBACK
